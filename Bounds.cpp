@@ -4,10 +4,10 @@
 using namespace std;
 
 
-void Bounds::resize(int dim, NT mult, NT around) {
-	NT hiDim = hi[dim];
-	NT loDim = lo[dim];
-	double origin = loDim + around * (hiDim - loDim);
+void Bounds::resize(int dim, float mult, float around) {
+	float hiDim = hi[dim];
+	float loDim = lo[dim];
+	float origin = loDim + around * (hiDim - loDim);
 	hi[dim] = mult * (hiDim - origin) + origin;
 	lo[dim] = mult * (loDim - origin) + origin;
 	trace[dim] *= mult;

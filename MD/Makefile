@@ -2,10 +2,10 @@ FLAGS = -std=c++11 -Wall -O3 #-fopenmp -Wall# -O3
 CC = g++
 PYLINK = -lpython2.7
 MD = /home/daniel/Documents/classSim/mdmc/MD/
-SHARED = /home/daniel/Documents/classSim/mdmc 
+SHARED = /home/daniel/Documents/classSim/mdmc/
 
-H = $(wildcard *.h)
-SRCS = $(wildcard *.cpp)
+H = $(wildcard $(MD)*.h) $(wildcard $(SHARED)*.h)
+SRCS = $(wildcard $(MD)*.cpp) $(wildcard $(SHARED)*.cpp)
 
 OBJS = $(SRCS:.cpp=.cpp.o)
 $(info Serial result = $(OBJS))

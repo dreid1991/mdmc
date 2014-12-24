@@ -1,6 +1,27 @@
 #include "AtomGrid.h"
 
 
+void AtomGrid::buildNeighborLists(float thresh, bool *loops) {
+	reset();
+	/*
+	*based on looping values, make list of squares that corresponds to the neighbors for each square.
+	 Then for each atom, add atoms by following each linked list and appening those within rcut
+	*/ 
+	vector<vector<Atom *> > neighborSquaress;
+	for (int i=0; i<ns[0]; i++) {
+		for (int j=0; j<ns[1]; j++) {
+			for (int k=0; k<ns[2]; k++) {
+				int coord[3];
+				coord[0] = i; coord[1] = j; coord[2] = k;
+				neighborSquaress.push_back(&coord, loops, bounds.trace);
+			}
+		}
+	}
+	for (Atom *a : atoms) {
+		
+	}
+}
+
 /*
 vector<OffsetObj<atomlist *> > AtomGrid::getNeighborSquares(const int x, const int y, const int z, const bool loopX, const bool loopY, const bool loopZ) {
 	vector<OffsetObj<atomlist *> > neighbors;
@@ -35,16 +56,6 @@ vector<OffsetObj<atomlist *> > AtomGrid::getNeighborSquares(const int x, const i
 	return neighbors;
 }
 */
-void AtomGrid::setGridRaws() {
-	int n = ns[0] * ns[1] * ns[2];
-	vector<Atom *> src;
-	src.reserve(n);
-	for (int i=0; i<n; i++) {
-		src.push_back((Atom *) NULL);
-	}
-	setRaw(src);
-	setSaved(src);
-}
 /*
 void AtomGrid::assignNeighbors(const double searchRad, const bool loopX, const bool loopY, const bool loopZ) {
 	const double radSqr = searchRad * searchRad;

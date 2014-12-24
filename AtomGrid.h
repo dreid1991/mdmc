@@ -13,15 +13,13 @@ class AtomGrid : public Grid<Atom *> {
 	}
 	//void sliceBounds(double *, double *, double *, double *, double *, double *);
 	//atomlist atomsInNonLoopingBounds(Bounds b);
-	void setGridRaws();
 	public:
 		Bounds bounds;
-		atomlist atoms;
-		AtomGrid(Bounds b_, double dx_, double dy_, double dz_) : Grid(ceil(b_.trace[0]/dx_), ceil(b_.trace[1]/dy_), ceil(b_.trace[2]/dz_), Vector(dx_, dy_, dz_), b_.lo), bounds(b_) {
-			setGridRaws();
+		atomlist &atoms;
+		AtomGrid(vector<Atom *> &atoms, Bounds b_, float dx_, float dy_, float dz_) : Grid(ceil(b_.trace[0]/dx_), ceil(b_.trace[1]/dy_), ceil(b_.trace[2]/dz_), Vector(dx_, dy_, dz_), b_.lo, (Atom *) NULL ), bounds(b_) {
+			saveRaw();
 		};
-		//void assignNeighbors(const double rad, bool loopX, bool loopY, bool loopZ);
-		//vector<Neighbor> getNeighborSquares(const int x, const int y, const int z, const bool loopX, const bool loopY, const bool loopZ);
+		void buildNeighborLists(float thresh, bool *loops);
 		//atomlist selectFromBounds(Bounds);
 };
 

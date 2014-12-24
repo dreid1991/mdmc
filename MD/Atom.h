@@ -16,7 +16,7 @@ class Atom {
 		Vector velLast;
 		Vector force;
 		Atom *next;
-		NT m;
+		float m;
 		vector<Neighbor> neighbors;
 		Atom (Vector pos_) : pos(pos_), next((Atom *) NULL), m(0) {};
 

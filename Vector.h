@@ -8,19 +8,24 @@
 using namespace std;
 #define EPSILON .000001
 class Vector{
-	NT vals[3];
+	float vals[3];
 	public:
 
 		Vector () {
 			vals[0] = vals[1] = vals[2] = 0;
 		}
-		Vector (NT x, NT y, NT z) {
+		Vector (float x, float y, float z) {
 			vals[0] = x;
 			vals[1] = y;
 			vals[2] = z;
 
 		}
-		Vector (NT *vals_) {
+		Vector (int *vals_) {
+			for (int i=0; i<3; i++) {
+				vals[i] = (*vals_)[i];
+			}
+		}
+		Vector (float *vals_) {
 			for (int i=0; i<3; i++) {
 				vals[i] = vals_[i];
 			}
@@ -28,22 +33,22 @@ class Vector{
 		Vector VTo(const Vector &v) {
 			return Vector(v[0] - vals[0], v[1] - vals[1], v[2] - vals[2]);
 		}
-		NT &operator[]( int n ){
+		float &operator[]( int n ){
 			return vals[n]; 
 		}
-		NT operator[]( const int n )const{
+		float operator[]( const int n )const{
 			return vals[n];
 		}
 		Vector operator-()const{
 			return Vector( vals[0], vals[1], vals[2]); 
 		}
-		Vector operator*( NT scale )const{
+		Vector operator*( float scale )const{
 			return Vector( vals[0]*scale,vals[1]*scale,vals[2]*scale );
 		}
 		Vector operator*( const Vector &q )const{
 			return Vector( vals[0]*q[0],vals[1]*q[1],vals[2]*q[2]);
 		}
-		Vector operator/( NT scale )const{
+		Vector operator/( float scale )const{
 			return Vector( vals[0]/scale,vals[1]/scale,vals[2]/scale );
 		}
 		Vector operator/( const Vector &q )const{
@@ -55,13 +60,13 @@ class Vector{
 		Vector operator-( const Vector &q )const{
 			return Vector( vals[0]-q[0],vals[1]-q[1],vals[2]-q[2] );
 		}
-		Vector &operator*=( NT scale ){
+		Vector &operator*=( float scale ){
 			vals[0]*=scale;vals[1]*=scale;vals[2]*=scale;return *this;
 		}
 		Vector &operator*=( const Vector &q ){
 			vals[0]*=q[0];vals[1]*=q[1];vals[2]*=q[2];return *this;
 		}
-		Vector &operator/=( NT scale ){
+		Vector &operator/=( float scale ){
 			vals[0]/=scale;vals[1]/=scale;vals[2]/=scale;return *this;
 		}
 		Vector &operator/=( const Vector &q ){
@@ -84,48 +89,48 @@ class Vector{
 		bool operator!=( const Vector &q )const{
 			return fabs(vals[0]-q[0])>EPSILON || fabs(vals[1]-q[1])>EPSILON || fabs(vals[2]-q[2])>EPSILON;
 		}
-		NT dot( const Vector &q )const{
+		float dot( const Vector &q )const{
 			return vals[0]*q[0]+vals[1]*q[1]+vals[2]*q[2];
 		}
 		Vector cross( const Vector &q )const{
 			return Vector( vals[1]*q[2]-vals[2]*q[1],vals[2]*q[0]-vals[0]*q[2],vals[0]*q[1]-vals[1]*q[0] );
 		}
-		NT len()const{
+		float len()const{
 			return sqrt(vals[0]*vals[0]+vals[1]*vals[1]+vals[2]*vals[2]);
 		}
-		NT lenSqr()const{
+		float lenSqr()const{
 			return vals[0]*vals[0]+vals[1]*vals[1]+vals[2]*vals[2];
 		}
-		NT dist( const Vector &q )const{
-			NT dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return sqrt(dx*dx+dy*dy+dz*dz);
+		float dist( const Vector &q )const{
+			float dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return sqrt(dx*dx+dy*dy+dz*dz);
 		}
-		NT distSqr( const Vector &q) {
-			NT dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return dx*dx+dy*dy+dz*dz;
+		float distSqr( const Vector &q) {
+			float dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return dx*dx+dy*dy+dz*dz;
 		}
 		Vector normalized()const{
-			NT l=len();return Vector( vals[0]/l,vals[1]/l,vals[2]/l );
+			float l=len();return Vector( vals[0]/l,vals[1]/l,vals[2]/l );
 		}
 		void normalize(){
-			NT l=len();vals[0]/=l;vals[1]/=l;vals[2]/=l;
+			float l=len();vals[0]/=l;vals[1]/=l;vals[2]/=l;
 		}
-		NT yaw()const{
+		float yaw()const{
 			return -atan2f( vals[0],vals[2] );
 		}
-		NT pitch()const{
+		float pitch()const{
 			return -atan2f( vals[1],sqrtf( vals[0]*vals[0]+vals[2]*vals[2] ) );
 		}
 		void clear(){
 			vals[0] = vals[1] = vals[2] = 0;
 		}
 		void rotateccw() {
-			const NT dx = vals[0];
-			const NT dy = vals[1];
+			const float dx = vals[0];
+			const float dy = vals[1];
 			vals[0] = -dy;
 			vals[1] = dx;
 		}
 		void rotatecw() {
-			const NT dx = vals[0];
-			const NT dy = vals[1];
+			const float dx = vals[0];
+			const float dy = vals[1];
 			vals[0] = dy;
 			vals[1] = -dx;
 		}
