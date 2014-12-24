@@ -7,19 +7,19 @@ void AtomGrid::buildNeighborLists(float thresh, bool *loops) {
 	*based on looping values, make list of squares that corresponds to the neighbors for each square.
 	 Then for each atom, add atoms by following each linked list and appening those within rcut
 	*/ 
-	vector<vector<Atom *> > neighborSquaress;
+	vector<vector<OffsetObj<Atom *> > > neighborSquaress;
 	for (int i=0; i<ns[0]; i++) {
 		for (int j=0; j<ns[1]; j++) {
 			for (int k=0; k<ns[2]; k++) {
 				int coord[3];
 				coord[0] = i; coord[1] = j; coord[2] = k;
-				neighborSquaress.push_back(&coord, loops, bounds.trace);
+				neighborSquaress.push_back(getNeighbors(coord, loops, bounds.trace));
 			}
 		}
 	}
-	for (Atom *a : atoms) {
+	//for (Atom *a : atoms) {
 		
-	}
+//	}
 }
 
 /*

@@ -1,19 +1,18 @@
 #ifndef BOUNDS_GENERIC_H
 #define BOUNDS_GENERIC_H
 
-#include "Vector"
+#include "Vector.h"
+#include <string>
 
 class BoundsGeneric {
 	public:
 		Vector lo;
 		Vector hi;
 		Vector trace;
-		Bounds() {
+		BoundsGeneric() {
 
 		}
-		Bounds(Vector &lo_, Vector &hi_) : lo(lo_), hi(hi_), trace(hi - lo) {
-		}
-		Bounds(Vector lo_, Vector hi_) : lo(lo_), hi(hi_), trace(hi - lo) {
+		BoundsGeneric(Vector &lo_, Vector &hi_) : lo(lo_), hi(hi_), trace(hi - lo) {
 		}
 		
 		string asStr() {
@@ -38,5 +37,5 @@ class BoundsGeneric {
 			}
 			return true;
 		}
-}
+};
 #endif

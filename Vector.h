@@ -20,12 +20,12 @@ class Vector{
 			vals[2] = z;
 
 		}
-		Vector (int *vals_) {
+		Vector (int vals_[3]) {
 			for (int i=0; i<3; i++) {
-				vals[i] = (*vals_)[i];
+				vals[i] = (float) vals_[i];
 			}
 		}
-		Vector (float *vals_) {
+		Vector (float vals_[3]) {
 			for (int i=0; i<3; i++) {
 				vals[i] = vals_[i];
 			}

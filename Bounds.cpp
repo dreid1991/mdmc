@@ -3,16 +3,6 @@
 #include "Bounds.h"
 using namespace std;
 
-
-void Bounds::resize(int dim, float mult, float around) {
-	float hiDim = hi[dim];
-	float loDim = lo[dim];
-	float origin = loDim + around * (hiDim - loDim);
-	hi[dim] = mult * (hiDim - origin) + origin;
-	lo[dim] = mult * (loDim - origin) + origin;
-	trace[dim] *= mult;
-}
-
 bool Bounds::atomInBounds(Atom *a) {
 	for (int i=0; i<NDIM; i++) {
 		if (not (a->pos[i] >= lo[i] and a->pos[i] <= hi[i])) {

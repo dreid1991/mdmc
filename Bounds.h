@@ -1,7 +1,5 @@
 #ifndef BOUNDS_H
 #define BOUNDS_H
-#include "Vector.h"
-#include <string>
 #include <stdio.h>
 #include "Atom.h"
 #include "BoundsGeneric.h"

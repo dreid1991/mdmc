@@ -53,10 +53,10 @@ class Grid {
 			Vector coord = (v - os) / ds;
 			return raw[(int)coord[0] * ns[1]*ns[2] + (int)coord[1] * ns[1] + (int)coord[2]];
 		};
-		T &operator() (int *coords, int *didLoop) {
+		T &operator() (int coords[3], int didLoop[3]) {
 			int loopRes[3];
 			for (int i=0; i<3; i++) {
-				loopRes[i] = loopDim((*coords)[i], ns[i], &(*didLoop)[i]);
+				loopRes[i] = loopDim(coords[i], ns[i], &(didLoop[i]));
 			}
 			return (*this)(loopRes[0], loopRes[1], loopRes[2]);
 		};
@@ -75,10 +75,10 @@ class Grid {
 		void saveRaw() {
 			saved = raw;
 		}
-		vector<OffsetObj<T> > getNeighbors(int const *coords, bool const *loops, Vector trace) {
-			const int x = (*coords)[0];
-			const int y = (*coords)[1];
-			const int z = (*coords)[2];
+		vector<OffsetObj<T> > getNeighbors(int coords[3], bool loops[3], Vector trace) {
+			const int x = coords[0];
+			const int y = coords[1];
+			const int z = coords[2];
 			vector<OffsetObj<T> > neighbors;
 			for (int i=x-1; i<=x+1; i++) {
 				for (int j=y-1; j<=y+1; j++) {
@@ -91,25 +91,26 @@ class Grid {
 							boxCoords[2] = k;
 							int didLoop[3];
 							float offsets[3];
-							didLoop[0] = didLoop[1] = didLoops[2] = 0;
+							didLoop[0] = didLoop[1] = didLoop[2] = 0;
 							offsets[0] = offsets[1] = offsets[2] = 0;
-							T neigh = (*this)(&boxCoords, &didLoop);
+							T neigh = (*this)(boxCoords, didLoop);
 							bool append = true;
 							for (int i=0; i<3; i++) {
-								append = append and (not didLoop[i] or (didLoop[i] and (*loops)[i]));
+								append = append and (not didLoop[i] or (didLoop[i] and loops[i]));
 							}
 							if (append) {
 								for (int i=0; i<3; i++) {
 									offsets[i] = didLoop[i] * trace[i];
 								}
-								Vector offset(*offsets);
-								neighbors.push_back(OffsetObj<atomlist *>(neigh, offset));
+								Vector offset(offsets);
+								neighbors.push_back(OffsetObj<T>(neigh, offset));
 							}
 
 						}
 					}
 				}
 			}
+			return neighbors;
 
 		}
 	

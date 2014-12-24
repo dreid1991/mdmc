@@ -3,8 +3,10 @@
 #include "Vector.h"
 template <class T>
 class OffsetObj {
-	T obj;
-	Vector offset;
+	public:
+		T obj;
+		Vector offset;
+		OffsetObj (T &obj_, Vector offset_) : obj(obj_), offset(offset_) {};
 };
 #endif
 
