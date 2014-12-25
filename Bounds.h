@@ -10,9 +10,9 @@ class Bounds : public BoundsGeneric {
 		Bounds() {
 
 		}
-		Bounds(Vector &lo_, Vector &hi_) : BoundsGeneric(lo, hi) {
+		Bounds(Vector &lo_, Vector &hi_) : BoundsGeneric(lo_, hi_) {
 		}
-		Bounds(Vector lo_, Vector hi_) : BoundsGeneric(lo, hi) {
+		Bounds(Vector lo_, Vector hi_) : BoundsGeneric(lo_, hi_) {
 		}
 		
 		string asStr() {

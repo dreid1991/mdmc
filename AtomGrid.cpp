@@ -1,7 +1,7 @@
 #include "AtomGrid.h"
 
 
-void AtomGrid::buildNeighborLists(float thresh, bool *loops) {
+void AtomGrid::buildNeighborLists(float thresh, bool loops[3]) {
 	reset();
 	/*
 	*based on looping values, make list of squares that corresponds to the neighbors for each square.
@@ -14,10 +14,15 @@ void AtomGrid::buildNeighborLists(float thresh, bool *loops) {
 				int coord[3];
 				coord[0] = i; coord[1] = j; coord[2] = k;
 				neighborSquaress.push_back(getNeighbors(coord, loops, bounds.trace));
+				cout << neighborSquaress[0].size() << endl;
+				cout << "here" << endl;
+				break;
 			}
+			break;
 		}
+		break;
 	}
-	//for (Atom *a : atoms) {
+//	for (Atom *a : atoms) {
 		
 //	}
 }

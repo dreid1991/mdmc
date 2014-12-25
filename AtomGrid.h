@@ -16,7 +16,7 @@ class AtomGrid : public Grid<Atom *> {
 	public:
 		Bounds bounds;
 		atomlist &atoms;
-		AtomGrid(vector<Atom *> &atoms_, Bounds b_, float dx_, float dy_, float dz_) :Grid(ceil(b_.trace[0]/dx_), ceil(b_.trace[1]/dy_), ceil(b_.trace[2]/dz_), Vector(dx_, dy_, dz_), b_.lo, (Atom *) NULL ), bounds(b_), atoms(atoms_) {
+		AtomGrid(vector<Atom *> &atoms_, Bounds b_, float dx_, float dy_, float dz_) : Grid(ceil(b_.trace[0]/dx_), ceil(b_.trace[1]/dy_), ceil(b_.trace[2]/dz_), Vector(dx_, dy_, dz_), b_.lo, (Atom *) NULL ), bounds(b_), atoms(atoms_) {
 			saveRaw();
 		};
 		void buildNeighborLists(float thresh, bool *loops);

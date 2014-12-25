@@ -18,5 +18,6 @@ main: $(OBJS)
 #	g++ $(FLAGS) $(SRCS) $(H) -I/usr/include/python2.7 -I$(APATH) -lpython2.7 -o a.out
 %.cpp.o: %.cpp
 	$(CC) $(FLAGS) -c -o $@ $< $(PYLINK) -I/usr/include/python2.7 -I$(MD) -I$(SHARED)
-#clean:
-#	rm *.cpp.o
+clean:
+	rm *.cpp.o
+	rm ../*.cpp.o

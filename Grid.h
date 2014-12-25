@@ -60,9 +60,27 @@ class Grid {
 			}
 			return (*this)(loopRes[0], loopRes[1], loopRes[2]);
 		};
+
 		Vector pos(const int x, const int y, const int z) {
 			return os + Vector(ds[0]*x, ds[1]*y, ds[2]*z);
 		};
+		Vector pos(int i) {
+			int numInSlice = ns[1] * ns[2];
+			int nx = i / numInSlice;
+			i -= nx * numInSlice;
+			int ny = i / ns[2];
+			i -= ny * ns[2];
+			int nz = i;
+			return pos(nx, ny, nz);
+		}
+		Vector posElem(T const &elem) {
+			for (unsigned int i=0; i<raw.size(); i++) {
+				if (elem == raw[i]) {
+					return pos(i);
+				}
+			}
+			return Vector(0, 0, 0);
+		}
 		void setRaw(vector<T> vals) {
 			raw = vals;
 		};
@@ -89,10 +107,8 @@ class Grid {
 							boxCoords[0] = i;
 							boxCoords[1] = j;
 							boxCoords[2] = k;
-							int didLoop[3];
-							float offsets[3];
-							didLoop[0] = didLoop[1] = didLoop[2] = 0;
-							offsets[0] = offsets[1] = offsets[2] = 0;
+							int didLoop[3] = {0, 0, 0};
+							float offsets[3] = {0, 0, 0};
 							T neigh = (*this)(boxCoords, didLoop);
 							bool append = true;
 							for (int i=0; i<3; i++) {
@@ -113,6 +129,7 @@ class Grid {
 			return neighbors;
 
 		}
+
 	
 };
 #endif

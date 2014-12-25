@@ -3,6 +3,7 @@
 
 #include "Vector.h"
 #include <string>
+#include <iostream>
 
 class BoundsGeneric {
 	public:
