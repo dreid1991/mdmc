@@ -20,6 +20,7 @@ class Atom {
 		vector<Neighbor> neighbors;
 		Atom (Vector pos_) : pos(pos_), next((Atom *) NULL), m(0) {};
 
+
 };
 
 #endif

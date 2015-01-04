@@ -100,7 +100,7 @@ class VectorGeneric {
 		}
 
 		VectorGeneric<T, K> &operator*=( int scale ){
-			vals[0]*=scale;vals[1]*=scale;vals[2]*=scale;return *this; // *=, /=, etc won't upsample like binary operations
+			vals[0]*=scale;vals[1]*=scale;vals[2]*=scale;return *this; // *=, /=, etc won't promote types like binary operations
 		}
 		VectorGeneric<T, K> &operator*=( float scale ){
 			vals[0]*=scale;vals[1]*=scale;vals[2]*=scale;return *this;
@@ -219,6 +219,17 @@ class VectorGeneric {
 			int n = sprintf(buffer, "x: %f, y: %f, z: %f", x, y, z);
 			assert(n >= 0);	
 			return string(buffer);
+		}
+		VectorGeneric<T, K> &operator=(const VectorGeneric<K, T> &other) {
+			for (int i=0; i<3; i++) {
+				vals[i] = other[i];
+			}
+			return *this;
+		}
+		VectorGeneric<T, K> (const VectorGeneric<K, T> &other) {
+			for (int i=0; i<3; i++) {
+				vals[i] = other[i];
+			}
 		}
 };
 

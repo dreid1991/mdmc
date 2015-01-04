@@ -13,16 +13,13 @@ class Grid {
 	public:
 		vector<T> saved;
 		vector<T> raw;
-		int ns[3]; //make const
+		const VectorInt ns;
 		const Vector ds;
 		const Vector os;
 		
 		Grid(){};
 			
-		Grid(int nx_, int ny_, int nz_, Vector ds_, Vector os_, T fillVal) : ds(ds_), os(os_) {
-			ns[0] = nx_;
-			ns[1] = ny_;
-			ns[2] = nz_;
+		Grid(VectorInt ns_, Vector ds_, Vector os_, T fillVal) : ns(ns_), ds(ds_), os(os_) {
 			assert(ns[0] > 0 and ns[1] > 0 and ns[2] > 0);
 			int n = ns[0]*ns[1]*ns[2];
 			raw.reserve(n);
@@ -49,9 +46,12 @@ class Grid {
 		//	}
 			return raw[x*ns[1]*ns[2] + y*ns[2] + z];
 		};
+		int idxFromCoord(VectorInt &coord) {
+			return coord[0] * ns[1]*ns[2] + coord[1]*ns[2] + coord[2];
+		}
 		T &operator()(Vector &v) {
-			Vector coord = (v - os) / ds;
-			return raw[(int)coord[0] * ns[1]*ns[2] + (int)coord[1] * ns[1] + (int)coord[2]];
+			VectorInt coord = (v - os) / ds;
+			return raw[idxFromCoord(coord)];
 		};
 		T &operator() (int coords[3], int didLoop[3]) {
 			int loopRes[3];
@@ -64,12 +64,9 @@ class Grid {
 		Vector pos(const int x, const int y, const int z) {
 			return os + Vector(ds[0]*x, ds[1]*y, ds[2]*z);
 		};
-		int index(Vector&v) {
-			int dims[3] = {0, 0, 0};
-			for (int i=0; i<3; i++) {
-				//dims[i] = v[i] / (
-			}
-			return 0;
+		int idxFromPos(Vector &v) {
+			VectorInt coord = (v - os) / ds;
+			return idxFromCoord(coord);
 		}
 		Vector pos(int i) {
 			int numInSlice = ns[1] * ns[2];
