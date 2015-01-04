@@ -18,6 +18,7 @@ class Atom {
 		Atom *next;
 		float m;
 		vector<Neighbor> neighbors;
+		vector<Vector> neighPosInit;
 		Atom (Vector pos_) : pos(pos_), next((Atom *) NULL), m(0) {};
 
 
