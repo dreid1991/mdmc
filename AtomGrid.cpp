@@ -1,5 +1,15 @@
 #include "AtomGrid.h"
+/*
+void AtomGrid::buildGridLinkedList() {
+	reset(); //set grid values back to NULL
+	for (Atom *a : atoms) {
+		Atom **currentAtSquare = &(*this)(a->pos);	
+		a->next = *currentAtSquare;
+		*currentAtSquare = a;
+	}
 
+}
+*/
 
 void AtomGrid::buildNeighborLists(float thresh, bool loops[3]) {
 	reset();
@@ -7,21 +17,23 @@ void AtomGrid::buildNeighborLists(float thresh, bool loops[3]) {
 	*based on looping values, make list of squares that corresponds to the neighbors for each square.
 	 Then for each atom, add atoms by following each linked list and appening those within rcut
 	*/ 
-	vector<vector<OffsetObj<Atom *> > > neighborSquaress;
+	buildGridLinkedList();
+	vector<vector<OffsetObj<Atom **> > > neighborSquaress;
+	cout << ns[0] << " " << ns[1] << " " << ns[2] << endl;
 	for (int i=0; i<ns[0]; i++) {
 		for (int j=0; j<ns[1]; j++) {
 			for (int k=0; k<ns[2]; k++) {
 				int coord[3];
 				coord[0] = i; coord[1] = j; coord[2] = k;
 				neighborSquaress.push_back(getNeighbors(coord, loops, bounds.trace));
-				cout << neighborSquaress[0].size() << endl;
-				cout << "here" << endl;
-				break;
 			}
-			break;
 		}
-		break;
 	}
+	for (Atom *a : atoms) {
+		
+	}
+
+
 //	for (Atom *a : atoms) {
 		
 //	}

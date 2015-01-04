@@ -13,6 +13,7 @@ class AtomGrid : public Grid<Atom *> {
 	}
 	//void sliceBounds(double *, double *, double *, double *, double *, double *);
 	//atomlist atomsInNonLoopingBounds(Bounds b);
+	void buildGridLinkedList();
 	public:
 		Bounds bounds;
 		atomlist &atoms;

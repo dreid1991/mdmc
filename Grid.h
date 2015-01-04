@@ -64,6 +64,13 @@ class Grid {
 		Vector pos(const int x, const int y, const int z) {
 			return os + Vector(ds[0]*x, ds[1]*y, ds[2]*z);
 		};
+		int index(Vector&v) {
+			int dims[3] = {0, 0, 0};
+			for (int i=0; i<3; i++) {
+				//dims[i] = v[i] / (
+			}
+			return 0;
+		}
 		Vector pos(int i) {
 			int numInSlice = ns[1] * ns[2];
 			int nx = i / numInSlice;
@@ -73,11 +80,10 @@ class Grid {
 			int nz = i;
 			return pos(nx, ny, nz);
 		}
-		Vector posElem(T const &elem) {
-			for (unsigned int i=0; i<raw.size(); i++) {
-				if (elem == raw[i]) {
-					return pos(i);
-				}
+		Vector posElem(T *elem) {
+			int i = elem - &raw[0];
+			if (i >= 0 and i < raw.size()) {
+				return pos(i);
 			}
 			return Vector(0, 0, 0);
 		}
@@ -93,7 +99,43 @@ class Grid {
 		void saveRaw() {
 			saved = raw;
 		}
-		vector<OffsetObj<T> > getNeighbors(int coords[3], bool loops[3], Vector trace) {
+		vector<OffsetObj<T*> > getNeighbors(int coords[3], bool loops[3], Vector trace) {
+			const int x = coords[0];
+			const int y = coords[1];
+			const int z = coords[2];
+			vector<OffsetObj<T*> > neighbors;
+			for (int i=x-1; i<=x+1; i++) {
+				for (int j=y-1; j<=y+1; j++) {
+					for (int k=z-1; k<=z+1; k++) {
+						if (not (i==x and j==y and k==z)) {
+							//Vector v(i, j, k);
+							int boxCoords[3];
+							boxCoords[0] = i;
+							boxCoords[1] = j;
+							boxCoords[2] = k;
+							int didLoop[3] = {0, 0, 0};
+							float offsets[3] = {0, 0, 0};
+							T *neigh = &(*this)(boxCoords, didLoop);
+							bool append = true;
+							for (int i=0; i<3; i++) {
+								append = append and (not didLoop[i] or (didLoop[i] and loops[i]));
+							}
+							if (append) {
+								for (int i=0; i<3; i++) {
+									offsets[i] = didLoop[i] * trace[i];
+								}
+								Vector offset(offsets);
+								neighbors.push_back(OffsetObj<T*>(neigh, offset));
+							}
+
+						}
+					}
+				}
+			}
+			return neighbors;
+
+		}
+		vector<OffsetObj<T> > getNeighborVals(int coords[3], bool loops[3], Vector trace) {
 			const int x = coords[0];
 			const int y = coords[1];
 			const int z = coords[2];
