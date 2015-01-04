@@ -57,6 +57,10 @@ class VectorGeneric {
 		T operator[]( const int n )const{
 			return vals[n];
 		}
+
+		VectorGeneric<T, K> abs() {
+			return VectorGeneric<T, K>((T) fabs(vals[0]), (T) fabs(vals[1]), (T) fabs(vals[2]));
+		}
 		VectorGeneric<T, K> operator-()const{
 			return VectorGeneric<T, K>(-vals[0], -vals[1], -vals[2]); 
 		}
