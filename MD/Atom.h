@@ -13,8 +13,8 @@ class Atom {
 	public:
 		Vector pos;
 		Vector vel;
-		Vector velLast;
 		Vector force;
+		Vector forceLast;
 		Atom *next;
 		float m;
 		vector<Neighbor> neighbors;

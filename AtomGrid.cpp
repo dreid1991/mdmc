@@ -1,15 +1,5 @@
 #include "AtomGrid.h"
-/*
-void AtomGrid::buildGridLinkedList() {
-	reset(); //set grid values back to NULL
-	for (Atom *a : atoms) {
-		Atom **currentAtSquare = &(*this)(a->pos);	
-		a->next = *currentAtSquare;
-		*currentAtSquare = a;
-	}
 
-}
-*/
 
 void AtomGrid::appendNeighborList(Atom *a, OffsetObj<Atom **> &gridSqr, float threshSqr) {
 	if (*gridSqr.obj != (Atom *) NULL) {
@@ -32,7 +22,7 @@ void AtomGrid::buildNeighborLists(float thresh, bool loops[3]) { //grid size mus
 	}
 	reset();
 	/*
-	*based on looping values, make list of squares that corresponds to the neighbors for each square.
+	*using looping values, make list of squares that corresponds to the neighbors for each square.
 	 Then for each atom, add atoms by following each linked list and appening those within rcut
 	*/ 
 	vector<vector<OffsetObj<Atom **> > > neighborSquaress;
@@ -54,80 +44,15 @@ void AtomGrid::buildNeighborLists(float thresh, bool loops[3]) { //grid size mus
 		appendNeighborList(a, selfSquare, threshSqr);
 		a->next = *selfSquare.obj;
 		*selfSquare.obj = a;
-	//	Atom *leAtom = (*this)(a->pos);
-	//	cout << "Atom " << endl;
-	//	cout << leAtom << endl;
 		vector<OffsetObj<Atom **> > &neighborSquares = neighborSquaress[idx];
-//		cout << neighborSquares.size() << endl;
 		for (OffsetObj<Atom **> &neighborSquare : neighborSquares) {
 			appendNeighborList(a, neighborSquare, threshSqr);	
 		}
 	}
 }
 
-/*
-vector<OffsetObj<atomlist *> > AtomGrid::getNeighborSquares(const int x, const int y, const int z, const bool loopX, const bool loopY, const bool loopZ) {
-	vector<OffsetObj<atomlist *> > neighbors;
-	for (int i=x-1; i<=x+1; i++) {
-		for (int j=y-1; j<=y+1; j++) {
-			for (int k=z-1; k<=z+1; k++) {
-				if (not (i==x and j==y and k==z)) {
-					Vector v(i, j, k);
-					int loopedX = 0;
-					int loopedY = 0;
-					int loopedZ = 0;
-					double offx=0, offy=0, offz=0;
-					atomlist &neigh = (*this)(i, j, k, &loopedX, &loopedY, &loopedZ);
-					if ((not loopedX or (loopedX and loopX)) and (not loopedY or (loopedY and loopY)) and (not loopedZ or (loopedZ and loopZ))) {
-						if (loopedX) {
-							offx = loopedX * bounds.trace.x;
-						}
-						if (loopedY) {
-							offy = loopedY * bounds.trace.y;
-						}
-						if (loopedZ) {
-							offz = loopedZ * bounds.trace.z;
-						}
-						Vector offset(offx, offy, offz);
-						neighbors.push_back(OffsetObj<atomlist *>(&neigh, offset));
-					}
 
-				}
-			}
-		}
-	}
-	return neighbors;
-}
-*/
 /*
-void AtomGrid::assignNeighbors(const double searchRad, const bool loopX, const bool loopY, const bool loopZ) {
-	const double radSqr = searchRad * searchRad;
-	for (int x=0; x<nx; x++) {
-		for (int y=0; y<ny; y++) {
-			for (int z=0; z<nz; z++) {
-				atomlist &sqr = (*this)(x, y, z);
-				vector<OffsetObj<atomlist *> > toCheck = getNeighborSquares(x, y, z, loopX, loopY, loopZ);
-				
-				Vector offset(0, 0, 0);
-				toCheck.push_back(OffsetObj<atomlist *>(&sqr, offset));
-				for (Atom *a : sqr) {
-					for (OffsetObj<atomlist *> cell : toCheck) {
-						vector<Atom *> &cellAtoms = *cell.obj;
-						Vector offset = cell.offset;
-						for (Atom *b : cellAtoms) {
-							if (a != b) {
-								Vector distVec = (Vector &) *b + offset - (Vector &) *a; 
-								if (distVec.lenSqr() <= radSqr) {
-									a->neighbors.push_back(Neighbor(b, offset));
-								}
-							} 
-						}
-					}
-				}
-			}
-		}
-	}
-}
 
 void AtomGrid::sliceBounds(double *testlo, double *testhi, double *boxlo, double *boxhi, double *newBndlo, double *newBndhi) {
 	if (*testlo < *boxlo) {
