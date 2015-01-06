@@ -15,11 +15,12 @@ class Atom {
 		Vector vel;
 		Vector force;
 		Vector forceLast;
+		Vector posAtNeighborListing;
 		Atom *next;
 		float m;
 		vector<Neighbor> neighbors;
-		vector<Vector> neighPosInit;
 		Atom (Vector pos_) : pos(pos_), next((Atom *) NULL), m(0) {};
+		Atom () {};
 
 
 };

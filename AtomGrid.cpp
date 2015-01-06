@@ -8,7 +8,6 @@ void AtomGrid::appendNeighborList(Atom *a, OffsetObj<Atom **> &gridSqr, float th
 		for (current = *gridSqr.obj; current != (Atom *)NULL; current = current->next) {
 			if (a->pos.distSqr(current->pos + offset) <= threshSqr) {
 				a->neighbors.push_back(Neighbor(current, offset));	
-				a->neighPosInit.push_back(current->pos);
 			}
 		}
 	}
@@ -17,8 +16,8 @@ void AtomGrid::appendNeighborList(Atom *a, OffsetObj<Atom **> &gridSqr, float th
 void AtomGrid::buildNeighborLists(float thresh, bool loops[3]) { //grid size must be >= 2*thresh
 	float threshSqr = thresh*thresh;
 	for (Atom *a : atoms) {
-		a->neighbors = vector<Neighbor>();
-		a->neighPosInit = vector<Vector>();
+		a->neighbors = vector<Neighbor>(a->neighbors.size()); //try to keep if from having to move resize the vectors all the time
+		a->posAtNeighborListing = a->pos;
 	}
 	reset();
 	/*

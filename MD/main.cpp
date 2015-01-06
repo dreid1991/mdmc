@@ -8,17 +8,17 @@
 #include <algorithm>
 #include <vector>
 #include "RunParams.h"
-#include "Integrator.h"
+#include "Integrate.h"
 using namespace std;
 
 
-//have do turn first, do turn functions in Integrator.  Have turn first be all same but w/ aLast = aCur.  Hopefully don't have to copy everything
+//have do turn first, do turn functions in Integrate.  Have turn first be all same but w/ aLast = aCur.  Hopefully don't have to copy everything
 
 int main() {
 	vector<Atom *> atoms;
 	int gridSize = 4;
 	Bounds b(Vector(0, 0, 0), Vector(10, 10, 10));
-	RunParams run(atoms, b, gridSize);
+	RunParams run(atoms, b, gridSize, .005, 50);
 	run.grid.bounds.populateOnGrid(run.atoms, 1000);
 
 	run.periodic[0] = true; 
