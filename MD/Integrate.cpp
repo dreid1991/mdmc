@@ -6,6 +6,7 @@ void Integrate::verletPreForce(vector<Atom *> &atoms, float dt) {
 	for (Atom *a : atoms) {
 		a->pos += a->vel * dt + a->force * halfDtSqr; 
 		a->forceLast = a->force;
+		a->force.zero();
 	}
 }
 
@@ -18,13 +19,21 @@ void Integrate::verletPostForce(vector<Atom *> &atoms, float dt) {
 }
 
 
-void Integrate::applyForces() {};
-
-void Integrate::firstTurn(RunParams &params) {
+void Integrate::applyForces() {
 	
+};
+
+void Integrate::firstTurn(Run &params) {
+	params.grid.buildNeighborLists(params.rCut, params.periodic);
+	verletPreForce(params.atoms, params.timestep);
+	applyForces();
+	for (Atom *a : params.atoms) {
+		a->forceLast = a->force;
+	}
+	verletPostForce(params.atoms, params.timestep);
 }
 
-void Integrate::run(RunParams &params, int turn, int numTurns) { //current turn should be 0 on first turn
+void Integrate::run(Run &params, int turn, int numTurns) { //current turn should be 0 on first turn
 	vector<Atom *> &atoms = params.atoms;
 	AtomGrid &grid = params.grid;
 	float rCut = params.rCut;
@@ -41,6 +50,7 @@ void Integrate::run(RunParams &params, int turn, int numTurns) { //current turn 
 	}
 	for (; turn<numTurns; turn++) {
 		if (! turn%reNeighborListCheck && checkReNeighbor(atoms, padding)) {
+			grid.enforcePeriodic();
 			grid.buildNeighborLists(rCut, periodic);
 		}
 		verletPreForce(atoms, dt);

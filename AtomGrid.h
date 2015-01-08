@@ -16,8 +16,10 @@ class AtomGrid : public Grid<Atom *> {
 	//atomlist atomsInNonLoopingBounds(Bounds b);
 	//void buildGridLinkedList();
 	public:
+		void enforcePeriodic();
+		void updateAtoms(vector<Atom *> &);
 		Bounds bounds;
-		atomlist &atoms;
+		atomlist atoms;
 		AtomGrid(vector<Atom *> &atoms_, Bounds b_, float dx_, float dy_, float dz_) : Grid(VectorInt((int) ceil(b_.trace[0]/dx_), (int) ceil(b_.trace[1]/dy_), (int) ceil(b_.trace[2]/dz_)), Vector(dx_, dy_, dz_), b_.lo, (Atom *) NULL ), bounds(b_), atoms(atoms_) {
 			saveRaw();
 		};

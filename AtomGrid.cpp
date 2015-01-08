@@ -13,10 +13,31 @@ void AtomGrid::appendNeighborList(Atom *a, OffsetObj<Atom **> &gridSqr, float th
 	}
 }
 
+void AtomGrid::enforcePeriodic() {
+	Vector lo = bounds.lo;
+	Vector hi = bounds.hi;
+	Vector trace = bounds.trace;
+	for (Atom *a : atoms) {
+		for (int i=0; i<3; i++) {
+			if (a->pos[i] < lo[i]) {
+				a->pos[i] += trace[i];
+			} else if (a->pos[i] >= hi[i]) {
+				a->pos[i] -= trace[i];
+			}
+			//IF YOU GET MYSTERIOUS CRASHES, THERE MAY BE FLOATING POINT ERROR WHERE ADDING/SUBTRACTING TRACE PUTS IT SLIGHTLY OFF OF THE GRID
+		}
+	}
+}
+
+void AtomGrid::updateAtoms(vector<Atom *> &atoms_) {
+	atoms = atoms_;
+	
+}
+
 void AtomGrid::buildNeighborLists(float thresh, bool loops[3]) { //grid size must be >= 2*thresh
 	float threshSqr = thresh*thresh;
 	for (Atom *a : atoms) {
-		a->neighbors = vector<Neighbor>(a->neighbors.size()); //try to keep if from having to move resize the vectors all the time
+		a->neighbors.erase(a->neighbors.begin(), a->neighbors.end()); 
 		a->posAtNeighborListing = a->pos;
 	}
 	reset();
