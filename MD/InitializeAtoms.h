@@ -5,6 +5,8 @@
 #include "AtomParams.h"
 #include <math.h>
 #include <vector>
+#include <random>
+#include <map>
 using namespace std;
 
 namespace InitializeAtoms {
@@ -25,6 +27,34 @@ namespace InitializeAtoms {
 				}
 			}
 		}
+	}
+	void initTemp(vector<Atom *> &atoms, float temp) { //boltzmann const is 1 for reduced lj units
+		default_random_engine generator;
+		map<float, normal_distribution<float> > dists;
+		for (Atom *a : atoms) {
+			if (dists.find(a->m) == dists.end()) {
+				dists[a->m] = normal_distribution<float> (0, sqrt(temp / a->m));
+			}
+		}
+		Vector sumVels;
+		for (Atom *a : atoms) {
+			for (int i=0; i<3; i++) {
+				a->vel[i] = dists[a->m](generator);
+			}
+			sumVels += a->vel;
+		}
+		sumVels /= (float) atoms.size();
+		float sumKe = 0;
+		for (Atom *a : atoms) {
+			a->vel -= sumVels;
+			sumKe += a->kinetic();
+		}
+		float curTemp = sumKe / 3.0 / atoms.size();
+		for (Atom *a : atoms) {
+			a->vel *= sqrt(temp / curTemp);
+		}
+
+		
 	}
 }
 

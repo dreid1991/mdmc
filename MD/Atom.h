@@ -21,6 +21,9 @@ class Atom {
 		vector<Neighbor> neighbors;
 		Atom (Vector pos_, float m_, int id_) : pos(pos_), next((Atom *) NULL), m(m_), id(id_) {};
 		Atom () {};
+		float kinetic() {
+			return 0.5 * m * vel.lenSqr();
+		}
 
 
 };

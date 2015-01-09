@@ -54,9 +54,12 @@ void Integrate::run(Run &params, int turn, int numTurns) { //current turn should
 		turn++;
 	}
 	for (; turn<numTurns; turn++) {
-		if (! turn%reNeighborListCheck && checkReNeighbor(atoms, padding)) {
+		if (! (turn%reNeighborListCheck) && checkReNeighbor(atoms, padding)) {
 			grid.enforcePeriodic();
 			grid.buildNeighborLists(rCut, periodic);
+		}
+		for (Atom *a : atoms) {
+			cout << "id " << a->id << " " << a->pos.asStr() << endl;
 		}
 		verletPreForce(atoms, dt);
 		applyForces(fixes, turn);

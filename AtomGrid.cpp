@@ -13,7 +13,7 @@ void AtomGrid::appendNeighborList(Atom *a, OffsetObj<Atom **> &gridSqr, float th
 	}
 }
 
-void AtomGrid::enforcePeriodic() {
+void AtomGrid::enforcePeriodic() { //make it so doesn't loop in finite dimensions
 	Vector lo = bounds.lo;
 	Vector hi = bounds.hi;
 	Vector trace = bounds.trace;
@@ -46,7 +46,6 @@ void AtomGrid::buildNeighborLists(float thresh, bool loops[3]) { //grid size mus
 	*/ 
 	vector<vector<OffsetObj<Atom **> > > neighborSquaress;
 	neighborSquaress.reserve(raw.size());
-	cout << ns[0] << " " << ns[1] << " " << ns[2] << endl;
 	for (int i=0; i<ns[0]; i++) {
 		for (int j=0; j<ns[1]; j++) {
 			for (int k=0; k<ns[2]; k++) {
