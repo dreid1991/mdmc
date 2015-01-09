@@ -28,14 +28,16 @@ int main() {
 	int gridSize = 4;
 	Bounds b(Vector(0, 0, 0), Vector(10, 10, 10));
 	Run run(b, gridSize, .005, 50);
-	run.grid.bounds.populateOnGrid(run.atoms, 1000, params[0]);
+	run.grid.bounds.populateOnGrid(run.atoms, 1000, params[1]); //could populate atoms on any grid!  just happen to use to one that spans the box
 	run.grid.updateAtoms(run.atoms);
 	run.periodic[0] = true; 
 	run.periodic[1] = true; 
 	run.periodic[2] = true; 
 
 
-	
+	for (Atom *a : run.atoms) {
+		cout << a->id << endl;
+	}
 
 	const int numTurns = 10000;
 	run.rCut= 1.75;
