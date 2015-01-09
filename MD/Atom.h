@@ -1,6 +1,5 @@
 #ifndef ATOM_H
 #define ATOM_H
-#include "globals.h"
 #include "Vector.h"
 #include <vector>
 #include "OffsetObj.h"

@@ -1,7 +1,6 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 #include <math.h>
-#include "globals.h"
 #include <string>
 #include <stdio.h>
 #include <assert.h>

@@ -31,7 +31,6 @@ void AtomGrid::enforcePeriodic() {
 
 void AtomGrid::updateAtoms(vector<Atom *> &atoms_) {
 	atoms = atoms_;
-	
 }
 
 void AtomGrid::buildNeighborLists(float thresh, bool loops[3]) { //grid size must be >= 2*thresh

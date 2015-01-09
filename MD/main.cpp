@@ -24,14 +24,19 @@ int main() {
 	AtomParamWrapper params(rCut);
 	params.push_back(AtomParams(1, 1.2, 1));
 	params.push_back(AtomParams(1.2, 1.2, 1));
+	cout << "HI" << endl;
+	cout.flush();
 	InteractionParams interactionParams(params);
+	cout << "HI" << endl;
+	cout.flush();
 	//need new way of populating to base it on params
 	int gridSize = 4;
 	Bounds b(Vector(0, 0, 0), Vector(10, 10, 10));
 	Run run(b, interactionParams, gridSize, .005, 50);
 	InitializeAtoms::populateOnGrid(run.atoms, run.grid.bounds, params[1], 1000);
-	
-	run.grid.updateAtoms(run.atoms);
+	for (Atom *a : run.atoms) {
+		//cout << a->pos.asStr() << endl;
+	}
 	run.periodic[0] = true; 
 	run.periodic[1] = true; 
 	run.periodic[2] = true; 
@@ -43,15 +48,15 @@ int main() {
 
 	//end fixed
 
-	for (Atom *a : run.atoms) {
-		cout << a->id << endl;
-	}
+	//for (Atom *a : run.atoms) {
+	//	cout << a->id << endl;
+	//}
 
-	const int numTurns = 10000;
+	//const int numTurns = 10000;
 	run.rCut = params.rCut;
 	run.padding = 0.5;
 	
-	Integrate::run(run, 0, numTurns);
+	//Integrate::run(run, 0, numTurns);
 	//g.buildNeighborLists(thresh, loops);
 
 }

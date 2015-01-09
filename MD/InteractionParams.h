@@ -2,13 +2,14 @@
 #define INTERACTION_PARAMS_H
 #include <math.h>
 #include "AtomParams.h"
+#include <iostream>
 //class for getting atom interaction parameters for force computation.  
 //Implemented completely in header so that can be inlined
 using namespace std;
 class InteractionParams {
 	public:
 		InteractionParams(){};
-		InteractionParams(AtomParamWrapper &wrapper) {
+		InteractionParams(AtomParamWrapper &wrapper) : numTypes(wrapper.params.size()) {
 			populate(wrapper);
 		};
 		vector<float> param1; //mapping 2d array into 1d list
@@ -19,7 +20,14 @@ class InteractionParams {
 		int numTypes;
 		//not many types, so n^2 size list isn't so bad, and makes it so getting params is faster than list that's not redundant 
 		void populate(AtomParamWrapper &wrapper) {
+			numTypes = wrapper.params.size();
+			cout << wrapper.rCut << endl;
+			cout.flush();
+			cout << "IN POP" << endl;
+			cout.flush();
 			vector<AtomParams> params = wrapper.params;
+			cout << "num types is " << numTypes << endl;
+			cout.flush();
 			for (int i=0; i<numTypes; i++) {
 				for (int j=0; j<numTypes; j++) {
 					AtomParams &a = params[i];
@@ -39,6 +47,8 @@ class InteractionParams {
 					offset.push_back(offsetVal);
 				}
 			}
+			cout << "POPULATED PARAMS" << endl;
+			cout.flush();
 		}
 		float getParam1(int i, int j) { //order doesn't matter, array is symmetric around diagonal
 			return param1[i * numTypes + j];

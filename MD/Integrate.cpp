@@ -4,7 +4,7 @@ void Integrate::verletPreForce(vector<Atom *> &atoms, float dt) {
 	float dtSqr = dt*dt;
 	float halfDtSqr = dtSqr/2;
 	for (Atom *a : atoms) {
-		a->pos += a->vel * dt + a->force * halfDtSqr; 
+		a->pos += a->vel * dt + a->force * (halfDtSqr / a->m); 
 		a->forceLast = a->force;
 		a->force.zero();
 	}
@@ -14,7 +14,7 @@ void Integrate::verletPreForce(vector<Atom *> &atoms, float dt) {
 void Integrate::verletPostForce(vector<Atom *> &atoms, float dt) {
 	float halfDt = .5 * dt;
 	for (Atom *a : atoms) {
-		a->vel += (a->forceLast + a->force) * halfDt;
+		a->vel += (a->forceLast + a->force) * (halfDt / a->m);
 	}
 }
 

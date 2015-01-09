@@ -31,7 +31,7 @@ class BoundsGeneric {
 			trace[dim] *= mult;
 		}
 		bool operator == (BoundsGeneric &b) {
-			for (int i=0; i<NDIM; i++) {
+			for (int i=0; i<3; i++) {
 				if (not (fabs(b.lo[i] - lo[i])<EPSILON and fabs(b.hi[i] - hi[i])<EPSILON)) {
 					return false;
 				}
