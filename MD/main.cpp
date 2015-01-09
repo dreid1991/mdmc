@@ -11,16 +11,24 @@
 #include "Integrate.h"
 #include "Data.h"
 #include "includefixes.h"
+#include "AtomParams.h"
+#include "InteractionParams.h"
 using namespace std;
 
 
 //have do turn first, do turn functions in Integrate.  Have turn first be all same but w/ aLast = aCur.  Hopefully don't have to copy everything
 
 int main() {
+	AtomParamWrapper params;
+	params.push_back(AtomParams(1, 1.2, 1));
+	params.push_back(AtomParams(1.2, 1.2, 1));
+	
+	InteractionParams interactionParams(params);
+	//need new way of populating to base it on params
 	int gridSize = 4;
 	Bounds b(Vector(0, 0, 0), Vector(10, 10, 10));
 	Run run(b, gridSize, .005, 50);
-	run.grid.bounds.populateOnGrid(run.atoms, 1000);
+	run.grid.bounds.populateOnGrid(run.atoms, 1000, params[0]);
 	run.grid.updateAtoms(run.atoms);
 	run.periodic[0] = true; 
 	run.periodic[1] = true; 

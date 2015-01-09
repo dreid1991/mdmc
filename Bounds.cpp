@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include "Bounds.h"
+#include "AtomParams.h"
 using namespace std;
 
 bool Bounds::atomInBounds(Atom *a) {
@@ -11,7 +12,7 @@ bool Bounds::atomInBounds(Atom *a) {
 	}
 	return true;
 }
-void Bounds::populateOnGrid(vector<Atom *> &atoms, unsigned int n) {
+void Bounds::populateOnGrid(vector<Atom *> &atoms, unsigned int n, AtomParams params) {
 	assert(n>=0);
 	int nPerSide = ceil(pow(n, 1.0/NDIM));
 	Vector deltaPerSide = trace / nPerSide;
@@ -23,7 +24,7 @@ void Bounds::populateOnGrid(vector<Atom *> &atoms, unsigned int n) {
 						return;
 					}
 					Vector pos = lo + Vector(i, j, k) * deltaPerSide;
-					Atom *a = new Atom(pos);
+					Atom *a = new Atom(pos, params.m, params.id);
 					atoms.push_back(a);
 
 				}
@@ -36,7 +37,7 @@ void Bounds::populateOnGrid(vector<Atom *> &atoms, unsigned int n) {
 					return;
 				}
 				Vector pos = lo + Vector(i, j, 0) * deltaPerSide;
-				Atom *a = new Atom(pos);
+				Atom *a = new Atom(pos, params.m, params.id);
 				atoms.push_back(a);
 			}
 		}

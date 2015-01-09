@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "Atom.h"
 #include "BoundsGeneric.h"
+#include "AtomParams.h"
 #include <assert.h>
 using namespace std;
 class Bounds : public BoundsGeneric {
@@ -22,7 +23,7 @@ class Bounds : public BoundsGeneric {
 			return loStr + ", " + hiStr ;
 		}
 		bool atomInBounds(Atom *);
-		void populateOnGrid(vector<Atom *> &atoms, unsigned int n);
+		void populateOnGrid(vector<Atom *> &atoms, unsigned int n, AtomParams);
 	
 
 };
