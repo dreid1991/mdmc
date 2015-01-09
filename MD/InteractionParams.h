@@ -13,6 +13,9 @@ class InteractionParams {
 		};
 		vector<float> param1; //mapping 2d array into 1d list
 		vector<float> param2; //param1 for r^12 term, param2 for r^6 term
+		vector<float> param3;
+		vector<float> param4;
+		vector<float> offset;
 		int numTypes;
 		//not many types, so n^2 size list isn't so bad, and makes it so getting params is faster than list that's not redundant 
 		void populate(AtomParamWrapper &wrapper) {
@@ -23,10 +26,17 @@ class InteractionParams {
 					AtomParams &b = params[j];
 					double sig = (a.sig + b.sig) / 2;
 					double eps = sqrt(a.eps * b.eps);
-					double p1 = eps * pow(sig, 12);
-					double p2 = 2 * eps * pow(sig, 6);
+					double p1 = eps * 48 * pow(sig, 12);
+					double p2 = eps * 24 * pow(sig, 6);
+					double p3 = eps * 4 * pow(sig, 12);
+					double p4 = eps * 4 * pow(sig, 6);
+					double offsetRatio = sig / wrapper.rCut;
+					double offsetVal =	4 * eps * (pow(offsetRatio, 12) - pow(offsetRatio, 6));
 					param1.push_back(p1);
 					param2.push_back(p2);
+					param3.push_back(p3);
+					param4.push_back(p4);
+					offset.push_back(offsetVal);
 				}
 			}
 		}
@@ -35,6 +45,15 @@ class InteractionParams {
 		}
 		float getParam2(int i, int j) {
 			return param2[i * numTypes + j];
+		}
+		float getParam3(int i, int j) {
+			return param3[i * numTypes + j];
+		}
+		float getParam4(int i, int j) {
+			return param4[i * numTypes + j];
+		}
+		float getOffset(int i, int j) {
+			return offset[i * numTypes + j];
 		}
 };
 

@@ -19,14 +19,18 @@ void Integrate::verletPostForce(vector<Atom *> &atoms, float dt) {
 }
 
 
-void Integrate::applyForces() {
-	
+void Integrate::applyForces(vector<Fix *> &fixes, int turn) {
+	for (Fix *fix : fixes) {
+		if (! (turn % fix->applyEvery)) {
+			fix->applyForces();
+		}
+	}
 };
 
 void Integrate::firstTurn(Run &params) {
 	params.grid.buildNeighborLists(params.rCut, params.periodic);
 	verletPreForce(params.atoms, params.timestep);
-	applyForces();
+	applyForces(params.fixes, 0);
 	for (Atom *a : params.atoms) {
 		a->forceLast = a->force;
 	}
@@ -35,6 +39,7 @@ void Integrate::firstTurn(Run &params) {
 
 void Integrate::run(Run &params, int turn, int numTurns) { //current turn should be 0 on first turn
 	vector<Atom *> &atoms = params.atoms;
+	vector<Fix *> &fixes = params.fixes;
 	AtomGrid &grid = params.grid;
 	float rCut = params.rCut;
 	float padding = params.padding;
@@ -54,7 +59,7 @@ void Integrate::run(Run &params, int turn, int numTurns) { //current turn should
 			grid.buildNeighborLists(rCut, periodic);
 		}
 		verletPreForce(atoms, dt);
-		applyForces();
+		applyForces(fixes, turn);
 		verletPostForce(atoms, dt);
 	}
 }

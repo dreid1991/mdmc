@@ -23,11 +23,9 @@ class Bounds : public BoundsGeneric {
 			return loStr + ", " + hiStr ;
 		}
 		bool atomInBounds(Atom *);
-		void populateOnGrid(vector<Atom *> &atoms, unsigned int n, AtomParams);
 	
 
 };
 
-extern Bounds nullBounds;
 
 #endif

@@ -54,6 +54,9 @@ class VectorGeneric {
 		VectorGeneric<float, int> VTo(const VectorGeneric<K, T> &v) {
 			return VectorGeneric<float, int>(v[0] - vals[0], v[1] - vals[1], v[2] - vals[2]);
 		}
+		T sum() {
+			return vals[0] + vals[1] + vals[2];
+		}
 		T &operator[]( int n ){
 			return vals[n]; 
 		}

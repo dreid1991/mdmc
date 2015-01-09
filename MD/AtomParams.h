@@ -1,6 +1,8 @@
 
 #ifndef ATOM_PARAMS_H
 #define ATOM_PARAMS_H
+#include <vector>
+using namespace std;
 
 
 class AtomParams {
@@ -15,7 +17,8 @@ class AtomParams {
 class AtomParamWrapper {
 	public:
 		vector<AtomParams> params;
-		AtomParamWrapper() {}
+		AtomParamWrapper(float rCut_) : rCut(rCut_) {}
+		const float rCut;
 		AtomParamWrapper &push_back(AtomParams params_) {
 			params_.id = params.size();
 			params.push_back(params_);

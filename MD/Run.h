@@ -6,6 +6,7 @@
 #include "Fix.h"
 #include <vector>
 #include "Data.h"
+#include "InteractionParams.h"
 using namespace std;
 /*
  * run owns atoms, data, and fixes -  All that it sees.
@@ -15,9 +16,10 @@ using namespace std;
 */
 class Run {
 	public:
-		Run(Bounds b, float gridSize, float timestep_, int reNeighborListCheck_) : atoms(vector<Atom *>()), grid(atoms, b, gridSize, gridSize, gridSize), timestep(timestep_), reNeighborListCheck(reNeighborListCheck_) {};
+		Run(Bounds b, InteractionParams &params_, float gridSize, float timestep_, int reNeighborListCheck_) : params(params_), grid(atoms, b, gridSize, gridSize, gridSize), timestep(timestep_), reNeighborListCheck(reNeighborListCheck_) {};
 		vector<Atom *> atoms;
 		vector<Fix *> fixes;
+		InteractionParams params;
 		AtomGrid grid;
 		float rCut;
 		float padding;
