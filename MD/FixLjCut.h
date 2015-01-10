@@ -9,7 +9,7 @@ class FixLjCut : public Fix {
 	public:
 		FixLjCut(vector<Atom *> &allAtoms_, vector<Atom *> atoms_, Data &simData_, InteractionParams &params_, float rCut) : Fix(allAtoms_, atoms_, simData_, 1), params(params_), rCutSqr(rCut*rCut) {};
 		InteractionParams params;
-		void applyForces();
+		void compute();
 		float rCutSqr;
 };
 

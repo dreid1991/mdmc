@@ -18,6 +18,7 @@ void AtomGrid::enforcePeriodic() { //make it so doesn't loop in finite dimension
 	Vector hi = bounds.hi;
 	Vector trace = bounds.trace;
 	for (Atom *a : atoms) {
+		Vector prev = a->pos;
 		for (int i=0; i<3; i++) {
 			if (a->pos[i] < lo[i]) {
 				a->pos[i] += trace[i];
@@ -25,6 +26,11 @@ void AtomGrid::enforcePeriodic() { //make it so doesn't loop in finite dimension
 				a->pos[i] -= trace[i];
 			}
 			//IF YOU GET MYSTERIOUS CRASHES, THERE MAY BE FLOATING POINT ERROR WHERE ADDING/SUBTRACTING TRACE PUTS IT SLIGHTLY OFF OF THE GRID
+		}
+		if (!bounds.atomInBounds(a)) {
+			cout << prev.asStr() << endl;
+			cout << "Atom id " << a->id << " moved more than one box length since building neighbor lists.  Program about to quit.  Consider decreasing your neighboring interval" << endl;
+			assert(false);
 		}
 	}
 }

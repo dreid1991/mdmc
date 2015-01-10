@@ -56,6 +56,9 @@ class VectorGeneric {
 		T sum() {
 			return vals[0] + vals[1] + vals[2];
 		}
+		T prod() {
+			return vals[0] * vals[1] * vals[2];
+		}
 		T &operator[]( int n ){
 			return vals[n]; 
 		}

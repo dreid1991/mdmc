@@ -2,11 +2,11 @@
 #define DATA_H
 
 #include "Energy.h"
-#include "DataThermo.h"
+#include "DataBlockAvgs.h"
 class Data {
 	public:
 		Data() : virialTotal(0) {};
-		DataThermo thermo;
+		BlockAvgs avgs;
 		Energy eng;
 		float virialTotal;
 };

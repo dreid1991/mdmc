@@ -20,8 +20,12 @@ namespace InitializeAtoms {
 					if ((int) atoms.size() == n) {
 						return;
 					}
+					int id = 0;
+					if (atoms.size()) {
+						id = atoms[atoms.size()-1]->id + 1;
+					}
 					Vector pos = b.lo + Vector(i, j, k) * deltaPerSide;
-					Atom *a = new Atom(pos, params.m, params.id);
+					Atom *a = new Atom(pos, params.m, params.type, id);
 					atoms.push_back(a);
 
 				}

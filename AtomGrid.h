@@ -6,6 +6,7 @@
 #include <math.h>
 #include "OffsetObj.h"
 #include <iostream>
+#include <assert.h>
 #include <vector>
 using namespace std;
 class AtomGrid : public Grid<Atom *> {

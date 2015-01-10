@@ -18,7 +18,7 @@ class InteractionParams {
 		vector<float> param4;
 		vector<float> offset;
 		int numTypes;
-		//not many types, so n^2 size list isn't so bad, and makes it so getting params is faster than list that's not redundant 
+		//not many types, so n^2 size list isn't so bad, and makes it so getting params is faster than from list that's not redundant 
 		void populate(AtomParamWrapper &wrapper) {
 			numTypes = wrapper.params.size();
 			vector<AtomParams> params = wrapper.params;

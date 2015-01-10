@@ -11,16 +11,16 @@ class AtomParams {
 		float sig;
 		float eps;
 		float m;
-		int id;
+		int type;
 };
-//want a little class to make sure params get assigned ids nicely
+//want a little class to make sure params get assigned types nicely
 class AtomParamWrapper {
 	public:
 		vector<AtomParams> params;
 		AtomParamWrapper(float rCut_) : rCut(rCut_) {}
 		const float rCut;
 		AtomParamWrapper &push_back(AtomParams params_) {
-			params_.id = params.size();
+			params_.type = params.size();
 			params.push_back(params_);
 			return *this;
 		}

@@ -6,7 +6,7 @@
 using namespace std;
 class Fix {
 	public:
-		virtual void applyForces(){};
+		virtual void compute(){};
 		vector<Atom *> &allAtoms;
 		vector<Atom *> atoms;
 		Data &simData;

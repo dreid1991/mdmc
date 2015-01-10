@@ -19,47 +19,40 @@ using namespace std;
 
 
 int main() {
-	const float rCut = 1.75;	
+	const float rCut = 2.5;	
 	AtomParamWrapper params(rCut);
-	params.push_back(AtomParams(1, 1.2, 2));
-	params.push_back(AtomParams(1.2, 1.2, 1));
+	params.push_back(AtomParams(1, 1, 3));
+	params.push_back(AtomParams(1.2, 1.2, 4));
 	InteractionParams interactionParams(params);
-	
-	int gridSize = 4;
-	Bounds b(Vector(0, 0, 0), Vector(10, 10, 10));
-	Run run(b, interactionParams, gridSize, 1, 1);
-	InitializeAtoms::populateOnGrid(run.atoms, run.grid.bounds, params[1], 200);
-	InitializeAtoms::initTemp(run.atoms, 2.2);
-	
-	float sumKe = 0;
-	for (Atom *a : run.atoms) {
-		sumKe += a->kinetic();
-		cout << sumKe << endl;
-	}
-	cout << "temp " << sumKe / 3.0 / (float) run.atoms.size() << endl;
+	cout << interactionParams.param1.size() << endl;
+	Bounds region1(Vector((float) 0, (float) 0, (float) 0), Vector((float) 7.5, (float) 15.0, (float) 15.0));
+	Bounds region2(Vector((float) 8.0, (float) 0.1, (float) 0.1), Vector((float) 14.9, (float) 14.9, (float) 14.9));
 
-	for (Atom *a : run.atoms) {
-	//	cout << a->pos.asStr() << endl;
-	}
+	int gridSize = 5;
+	Bounds b(Vector(0, 0, 0), Vector(15, 15, 15));
+	Run run(b, interactionParams, gridSize, .005, 5, 50);
+	run.rCut = params.rCut;
+	InitializeAtoms::populateOnGrid(run.atoms, region1, params[0], 700);
+	InitializeAtoms::populateOnGrid(run.atoms, region2, params[1], 700);
+	float temp = 1.1;
+	InitializeAtoms::initTemp(run.atoms, temp);
+	
 	run.periodic[0] = true; 
 	run.periodic[1] = true; 
 	run.periodic[2] = true; 
 	
 	//declaring fixes.  Make some cleaner way of doing this
-	//FixLjCut ljForce(run.atoms, run.atoms, run.data, run.params, run.rCut);
-	//run.fixes.push_back(&ljForce);
-	FixTest fTest(run.atoms, run.atoms, run.data, 1);
-	run.fixes.push_back(&fTest);
-	//end fixed
+	
+	FixLjCut ljForce(run.atoms, run.atoms, run.data, run.params, run.rCut);
+	run.fixes.push_back(&ljForce);
 
-	//for (Atom *a : run.atoms) {
-	//	cout << a->id << endl;
-	//}
+	FixNVT constTemp(run.atoms, run.atoms, run.data, temp, 30);
+	run.fixes.push_back(&constTemp);
+	
+	//end fixes
 
-	const int numTurns = 21;
-	run.rCut = params.rCut;
+	const int numTurns = 60000;
 	run.padding = 0.5;
-	run.atoms[0]->vel = Vector(1, 0, 0);
-	//Integrate::run(run, 0, numTurns);
+	Integrate::run(run, 0, numTurns);
 
 }

@@ -19,18 +19,25 @@ void Integrate::verletPostForce(vector<Atom *> &atoms, float dt) {
 }
 
 
-void Integrate::applyForces(vector<Fix *> &fixes, int turn) {
+void Integrate::addKineticEnergy(vector<Atom *> &atoms, Data &simData) {
+	for (Atom *a : atoms) {
+		simData.eng.kinetic += a->kinetic();
+	}
+}
+
+void Integrate::compute(vector<Fix *> &fixes, int turn) {
 	for (Fix *fix : fixes) {
 		if (! (turn % fix->applyEvery)) {
-			fix->applyForces();
+			fix->compute();
 		}
 	}
 };
 
 void Integrate::firstTurn(Run &params) {
 	params.grid.buildNeighborLists(params.rCut, params.periodic);
+	addKineticEnergy(params.atoms, params.data);
 	verletPreForce(params.atoms, params.timestep);
-	applyForces(params.fixes, 0);
+	compute(params.fixes, 0);
 	for (Atom *a : params.atoms) {
 		a->forceLast = a->force;
 	}
@@ -38,9 +45,11 @@ void Integrate::firstTurn(Run &params) {
 }
 
 void Integrate::run(Run &params, int turn, int numTurns) { //current turn should be 0 on first turn
+	const int dataInterval = params.dataInterval;
 	vector<Atom *> &atoms = params.atoms;
 	vector<Fix *> &fixes = params.fixes;
 	AtomGrid &grid = params.grid;
+	Data &simData = params.data;
 	float rCut = params.rCut;
 	float padding = params.padding;
 	bool periodic[3];
@@ -54,19 +63,45 @@ void Integrate::run(Run &params, int turn, int numTurns) { //current turn should
 		turn++;
 	}
 	for (; turn<numTurns; turn++) {
+		//cout << atoms[27]->pos.asStr() << endl;
+		//cout << atoms[27]->vel.asStr() << endl<<endl;
 		if (! (turn%reNeighborListCheck) && checkReNeighbor(atoms, padding)) {
 			grid.enforcePeriodic();
+
 			grid.buildNeighborLists(rCut, periodic);
 		}
-		for (Atom *a : atoms) {
-			cout << "id " << a->id << " " << a->pos.asStr() << endl;
-		}
+		addKineticEnergy(atoms, simData);
 		verletPreForce(atoms, dt);
-		applyForces(fixes, turn);
+		compute(fixes, turn);
 		verletPostForce(atoms, dt);
+
+		if (! (turn % dataInterval)) {
+			setThermoValues(params);
+		}
 	}
 }
 
+void Integrate::setThermoValues(Run &params) {
+	Data &simData = params.data;
+	vector<Atom *> &atoms = params.atoms;
+	int dataInterval = params.dataInterval;
+	float avgKinetic = simData.eng.kinetic / dataInterval;
+	float avgPotential = simData.eng.potential / dataInterval;
+	float temp = avgKinetic * (2.0 / 3) / (float) atoms.size();
+	float volume = params.grid.bounds.volume();
+	float density = atoms.size() / volume;
+	float pressure = density * temp + simData.virialTotal / volume / atoms.size();
+	simData.avgs.engKinetic = avgKinetic;
+	simData.avgs.engPotential = avgPotential;
+	simData.avgs.engTotal = avgPotential + avgKinetic;
+	simData.avgs.temp = temp;
+	simData.avgs.press = pressure;
+
+	simData.eng.kinetic = 0;
+	simData.eng.potential = 0;
+	simData.virialTotal = 0;
+	cout << pressure << endl;
+}
 
 bool Integrate::checkReNeighbor(vector<Atom *> &atoms, float movementThresh) {
 	float threshSqr = movementThresh*movementThresh;

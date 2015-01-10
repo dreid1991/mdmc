@@ -23,6 +23,7 @@ class Bounds : public BoundsGeneric {
 			return loStr + ", " + hiStr ;
 		}
 		bool atomInBounds(Atom *);
+		float volume();
 	
 
 };

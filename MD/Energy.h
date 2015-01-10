@@ -2,8 +2,7 @@
 #define ENERGY_H
 class Energy {
 	public:
-		Energy() : total(0), potential(0), kinetic(0) {};
-		float total;
+		Energy() : potential(0), kinetic(0) {};
 		float potential;
 		float kinetic;
 };

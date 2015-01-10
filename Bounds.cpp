@@ -13,3 +13,7 @@ bool Bounds::atomInBounds(Atom *a) {
 	return true;
 }
 
+float Bounds::volume() {
+	return trace.prod();
+}
+
