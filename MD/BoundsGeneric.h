@@ -22,10 +22,10 @@ class BoundsGeneric {
 			string hiStr = "upper bounds " + hi.asStr();
 			return loStr + ", " + hiStr ;
 		}
-		void resize(int dim, float mult, float around) {
-			float hiDim = hi[dim];
-			float loDim = lo[dim];
-			float origin = loDim + around * (hiDim - loDim);
+		void resize(int dim, double mult, double around) {
+			double hiDim = hi[dim];
+			double loDim = lo[dim];
+			double origin = loDim + around * (hiDim - loDim);
 			hi[dim] = mult * (hiDim - origin) + origin;
 			lo[dim] = mult * (loDim - origin) + origin;
 			trace[dim] *= mult;

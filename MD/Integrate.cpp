@@ -1,8 +1,8 @@
 #include "Integrate.h"
 
-void Integrate::verletPreForce(vector<Atom *> &atoms, float dt) {
-	float dtSqr = dt*dt;
-	float halfDtSqr = dtSqr/2;
+void Integrate::verletPreForce(vector<Atom *> &atoms, double dt) {
+	double dtSqr = dt*dt;
+	double halfDtSqr = dtSqr/2;
 	for (Atom *a : atoms) {
 		a->pos += a->vel * dt + a->force * (halfDtSqr / a->m); 
 		a->forceLast = a->force;
@@ -11,8 +11,8 @@ void Integrate::verletPreForce(vector<Atom *> &atoms, float dt) {
 }
 
 
-void Integrate::verletPostForce(vector<Atom *> &atoms, float dt) {
-	float halfDt = .5 * dt;
+void Integrate::verletPostForce(vector<Atom *> &atoms, double dt) {
+	double halfDt = .5 * dt;
 	for (Atom *a : atoms) {
 		a->vel += (a->forceLast + a->force) * (halfDt / a->m);
 	}
@@ -50,21 +50,19 @@ void Integrate::run(Run &params, int turn, int numTurns) { //current turn should
 	vector<Fix *> &fixes = params.fixes;
 	AtomGrid &grid = params.grid;
 	Data &simData = params.data;
-	float rCut = params.rCut;
-	float padding = params.padding;
+	double rCut = params.rCut;
+	double padding = params.padding;
 	bool periodic[3];
 	for (int i=0; i<3; i++) {
 		periodic[i] = params.periodic[i];
 	}
 	int reNeighborListCheck = params.reNeighborListCheck;
-	float dt = params.timestep;
+	double dt = params.timestep;
 	if (turn==0) {
 		firstTurn(params);
 		turn++;
 	}
 	for (; turn<numTurns; turn++) {
-		//cout << atoms[27]->pos.asStr() << endl;
-		//cout << atoms[27]->vel.asStr() << endl<<endl;
 		if (! (turn%reNeighborListCheck) && checkReNeighbor(atoms, padding)) {
 			grid.enforcePeriodic();
 
@@ -85,12 +83,12 @@ void Integrate::setThermoValues(Run &params) {
 	Data &simData = params.data;
 	vector<Atom *> &atoms = params.atoms;
 	int dataInterval = params.dataInterval;
-	float avgKinetic = simData.eng.kinetic / dataInterval;
-	float avgPotential = simData.eng.potential / dataInterval;
-	float temp = avgKinetic * (2.0 / 3) / (float) atoms.size();
-	float volume = params.grid.bounds.volume();
-	float density = atoms.size() / volume;
-	float pressure = density * temp + simData.virialTotal / volume / atoms.size();
+	double avgKinetic = simData.eng.kinetic / dataInterval;
+	double avgPotential = simData.eng.potential / dataInterval;
+	double temp = avgKinetic * (2.0 / 3) / (double) atoms.size();
+	double volume = params.grid.bounds.volume();
+	double density = atoms.size() / volume;
+	double pressure = density * temp + simData.virialTotal / volume / atoms.size();
 	simData.avgs.engKinetic = avgKinetic;
 	simData.avgs.engPotential = avgPotential;
 	simData.avgs.engTotal = avgPotential + avgKinetic;
@@ -100,11 +98,12 @@ void Integrate::setThermoValues(Run &params) {
 	simData.eng.kinetic = 0;
 	simData.eng.potential = 0;
 	simData.virialTotal = 0;
-	cout << pressure << endl;
+	//IF YOU WOULD LIKE TO OUTPUT DATA, THIS WOULD BE A GODO PLACE TO DO IT.  Example below
+	cout << simData.avgs.engTotal << endl;
 }
 
-bool Integrate::checkReNeighbor(vector<Atom *> &atoms, float movementThresh) {
-	float threshSqr = movementThresh*movementThresh;
+bool Integrate::checkReNeighbor(vector<Atom *> &atoms, double movementThresh) {
+	double threshSqr = movementThresh*movementThresh;
 	for (Atom *a : atoms) {
 		if (a->pos.distSqr(a->posAtNeighborListing) > threshSqr) { //HEY - this is dangerous because we're only rebuiding once at least one atom has moved too far, so we could be integrating for non-checking turns with relevant forces not being calculated
 			return true;

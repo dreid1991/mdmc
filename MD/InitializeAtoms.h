@@ -32,12 +32,12 @@ namespace InitializeAtoms {
 			}
 		}
 	}
-	void initTemp(vector<Atom *> &atoms, float temp) { //boltzmann const is 1 for reduced lj units
+	void initTemp(vector<Atom *> &atoms, double temp) { //boltzmann const is 1 for reduced lj units
 		default_random_engine generator;
-		map<float, normal_distribution<float> > dists;
+		map<double, normal_distribution<double> > dists;
 		for (Atom *a : atoms) {
 			if (dists.find(a->m) == dists.end()) {
-				dists[a->m] = normal_distribution<float> (0, sqrt(temp / a->m));
+				dists[a->m] = normal_distribution<double> (0, sqrt(temp / a->m));
 			}
 		}
 		Vector sumVels;
@@ -47,13 +47,13 @@ namespace InitializeAtoms {
 			}
 			sumVels += a->vel;
 		}
-		sumVels /= (float) atoms.size();
-		float sumKe = 0;
+		sumVels /= (double) atoms.size();
+		double sumKe = 0;
 		for (Atom *a : atoms) {
 			a->vel -= sumVels;
 			sumKe += a->kinetic();
 		}
-		float curTemp = sumKe / 3.0 / atoms.size();
+		double curTemp = sumKe / 3.0 / atoms.size();
 		for (Atom *a : atoms) {
 			a->vel *= sqrt(temp / curTemp);
 		}

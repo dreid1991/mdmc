@@ -6,13 +6,12 @@
 #include "Fix.h"
 using namespace std;
 namespace Integrate {
-	void verletPreForce(vector<Atom *> &atoms, float timestep);
-	void verletPostForce(vector<Atom *> &atoms, float timestep);
+	void verletPreForce(vector<Atom *> &atoms, double timestep);
+	void verletPostForce(vector<Atom *> &atoms, double timestep);
 	void compute(vector<Fix *> &, int);
 	void firstTurn(Run &params);
 	void run(Run &params, int currentTurn, int numTurns);
-	//void 
-	bool checkReNeighbor(vector<Atom *> &atoms, float);
+	bool checkReNeighbor(vector<Atom *> &atoms, double);
 	void addKineticEnergy(vector<Atom *> &, Data &);
 	void setThermoValues(Run &);
 }

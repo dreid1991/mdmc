@@ -16,14 +16,14 @@ using namespace std;
 */
 class Run {
 	public:
-		Run(Bounds b, InteractionParams &params_, float gridSize, float timestep_, int reNeighborListCheck_, int dataInterval_) : params(params_), grid(atoms, b, gridSize, gridSize, gridSize), timestep(timestep_), reNeighborListCheck(reNeighborListCheck_), dataInterval(dataInterval_) {};
+		Run(Bounds b, InteractionParams &params_, double gridSize, double timestep_, int reNeighborListCheck_, int dataInterval_) : params(params_), grid(atoms, b, gridSize, gridSize, gridSize), timestep(timestep_), reNeighborListCheck(reNeighborListCheck_), dataInterval(dataInterval_) {};
 		vector<Atom *> atoms;
 		vector<Fix *> fixes;
 		InteractionParams params;
 		AtomGrid grid;
-		float rCut;
-		float padding;
-		float timestep;
+		double rCut;
+		double padding;
+		double timestep;
 		bool periodic[3];
 		int reNeighborListCheck; //check for re-neighborlisting every # turns
 		int dataInterval;

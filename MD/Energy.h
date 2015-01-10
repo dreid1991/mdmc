@@ -3,7 +3,7 @@
 class Energy {
 	public:
 		Energy() : potential(0), kinetic(0) {};
-		float potential;
-		float kinetic;
+		double potential;
+		double kinetic;
 };
 #endif

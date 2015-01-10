@@ -19,22 +19,23 @@ using namespace std;
 
 
 int main() {
-	const float rCut = 2.5;	
+	const double rCut = 2.5;	
+	const double padding = 0.5
 	AtomParamWrapper params(rCut);
 	params.push_back(AtomParams(1, 1, 3));
 	params.push_back(AtomParams(1.2, 1.2, 4));
 	InteractionParams interactionParams(params);
-	cout << interactionParams.param1.size() << endl;
-	Bounds region1(Vector((float) 0, (float) 0, (float) 0), Vector((float) 7.5, (float) 15.0, (float) 15.0));
-	Bounds region2(Vector((float) 8.0, (float) 0.1, (float) 0.1), Vector((float) 14.9, (float) 14.9, (float) 14.9));
+	Bounds region1(Vector(0, 0, 0), Vector(7.5, 15.0, 15.0));
+	Bounds region2(Vector(8.0, 0.1, 0.1), Vector(14.9, 14.9, 14.9));
 
-	int gridSize = 5;
+	int gridSize = 2 * (rCut + padding) + .1;
 	Bounds b(Vector(0, 0, 0), Vector(15, 15, 15));
-	Run run(b, interactionParams, gridSize, .005, 5, 50);
+	Run run(b, interactionParams, gridSize, .005, 10, 1000);
+	run.padding = padding;
 	run.rCut = params.rCut;
 	InitializeAtoms::populateOnGrid(run.atoms, region1, params[0], 700);
 	InitializeAtoms::populateOnGrid(run.atoms, region2, params[1], 700);
-	float temp = 1.1;
+	double temp = 0.1;
 	InitializeAtoms::initTemp(run.atoms, temp);
 	
 	run.periodic[0] = true; 
@@ -51,8 +52,7 @@ int main() {
 	
 	//end fixes
 
-	const int numTurns = 60000;
-	run.padding = 0.5;
+	const int numTurns = 600000;
 	Integrate::run(run, 0, numTurns);
 
 }

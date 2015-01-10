@@ -12,10 +12,10 @@ using namespace std;
 template <typename T, typename K>
 class VectorGeneric;
 
-typedef VectorGeneric<float, int> Vector;
-typedef VectorGeneric<int, float> VectorInt;
+typedef VectorGeneric<double, int> Vector;
+typedef VectorGeneric<int, double> VectorInt;
 
-//theme for these operations is that if we're operating on unlike types, switch to float representation.  would like better way to do this
+//theme for these operations is that if we're operating on unlike types, switch to double representation.  would like better way to do this
 template <typename T, typename K>
 class VectorGeneric {
 	T vals[3];
@@ -24,12 +24,7 @@ class VectorGeneric {
 		VectorGeneric<T, K> () {
 			vals[0] = vals[1] = vals[2] = 0;
 		}
-		VectorGeneric<T, K> (float x, float y, float z) {  // if using literals, have to cast each as int or float so compiler can distinguish between these two constructors
-			vals[0] = x;
-			vals[1] = y;
-			vals[2] = z;
-		}
-		VectorGeneric<T, K> (int x, int y, int z) {
+		VectorGeneric<T, K> (double x, double y, double z) {  // if using literals, have to cast each as int or double so compiler can distinguish between these two constructors
 			vals[0] = x;
 			vals[1] = y;
 			vals[2] = z;
@@ -39,7 +34,7 @@ class VectorGeneric {
 				vals[i] = (T) vals_[i];
 			}
 		}
-		VectorGeneric<T, K> (float vals_[3]) {
+		VectorGeneric<T, K> (double vals_[3]) {
 			for (int i=0; i<3; i++) {
 				vals[i] = (T) vals_[i];
 			}
@@ -50,8 +45,8 @@ class VectorGeneric {
 		VectorGeneric<T, K> VTo(const VectorGeneric<T, K> &v) {
 			return VectorGeneric<T, K>(v[0] - vals[0], v[1] - vals[1], v[2] - vals[2]);
 		}
-		VectorGeneric<float, int> VTo(const VectorGeneric<K, T> &v) {
-			return VectorGeneric<float, int>(v[0] - vals[0], v[1] - vals[1], v[2] - vals[2]);
+		VectorGeneric<double, int> VTo(const VectorGeneric<K, T> &v) {
+			return VectorGeneric<double, int>(v[0] - vals[0], v[1] - vals[1], v[2] - vals[2]);
 		}
 		T sum() {
 			return vals[0] + vals[1] + vals[2];
@@ -72,49 +67,49 @@ class VectorGeneric {
 		VectorGeneric<T, K> operator-()const{
 			return VectorGeneric<T, K>(-vals[0], -vals[1], -vals[2]); 
 		}
-		VectorGeneric<float, int> operator*( float scale )const{
-			return VectorGeneric<float, int>( vals[0]*scale,vals[1]*scale,vals[2]*scale );
+		VectorGeneric<double, int> operator*( double scale )const{
+			return VectorGeneric<double, int>( vals[0]*scale,vals[1]*scale,vals[2]*scale );
 		}
 
 		VectorGeneric<T, K> operator*( const VectorGeneric<T, K> &q )const{
 			return VectorGeneric<T, K>( vals[0]*q[0],vals[1]*q[1],vals[2]*q[2]);
 		}
-		VectorGeneric<float, int> operator*( const VectorGeneric<K, T> &q )const{
-			return VectorGeneric<float, int>( vals[0]*q[0],vals[1]*q[1],vals[2]*q[2]);
+		VectorGeneric<double, int> operator*( const VectorGeneric<K, T> &q )const{
+			return VectorGeneric<double, int>( vals[0]*q[0],vals[1]*q[1],vals[2]*q[2]);
 		}
 
 		VectorGeneric<T, K> operator/( int scale )const{
 			return VectorGeneric<T, K>( vals[0]/scale,vals[1]/scale,vals[2]/scale );
 		}
-		VectorGeneric<float, int> operator/( float scale )const{
-			return VectorGeneric<float, int>( vals[0]/scale,vals[1]/scale,vals[2]/scale );
+		VectorGeneric<double, int> operator/( double scale )const{
+			return VectorGeneric<double, int>( vals[0]/scale,vals[1]/scale,vals[2]/scale );
 		}
 
 		VectorGeneric<T, K> operator/( const VectorGeneric<T, K> &q )const{
 			return VectorGeneric<T, K>( vals[0]/q[0],vals[1]/q[1],vals[2]/q[2] );
 		}
-		VectorGeneric<float, int> operator/( const VectorGeneric<K, T> &q )const{
-			return VectorGeneric<float, int>( vals[0]/q[0],vals[1]/q[1],vals[2]/q[2] );
+		VectorGeneric<double, int> operator/( const VectorGeneric<K, T> &q )const{
+			return VectorGeneric<double, int>( vals[0]/q[0],vals[1]/q[1],vals[2]/q[2] );
 		}
 
 		VectorGeneric<T, K> operator+( const VectorGeneric<T, K> &q )const{
 			return VectorGeneric<T, K>( vals[0]+q[0],vals[1]+q[1],vals[2]+q[2] );
 		}
-		VectorGeneric<float, int> operator+( const VectorGeneric<K, T> &q )const{
-			return VectorGeneric<float, int>( vals[0]+q[0],vals[1]+q[1],vals[2]+q[2] );
+		VectorGeneric<double, int> operator+( const VectorGeneric<K, T> &q )const{
+			return VectorGeneric<double, int>( vals[0]+q[0],vals[1]+q[1],vals[2]+q[2] );
 		}
 
 		VectorGeneric<T, K> operator-( const VectorGeneric<T, K> &q )const{
 			return VectorGeneric<T, K>( vals[0]-q[0],vals[1]-q[1],vals[2]-q[2] );
 		}
-		VectorGeneric<float, int> operator-( const VectorGeneric<K, T> &q )const{
-			return VectorGeneric<float, int>( vals[0]-q[0],vals[1]-q[1],vals[2]-q[2] );
+		VectorGeneric<double, int> operator-( const VectorGeneric<K, T> &q )const{
+			return VectorGeneric<double, int>( vals[0]-q[0],vals[1]-q[1],vals[2]-q[2] );
 		}
 
 		VectorGeneric<T, K> &operator*=( int scale ){
 			vals[0]*=scale;vals[1]*=scale;vals[2]*=scale;return *this; // *=, /=, etc won't promote types like binary operations
 		}
-		VectorGeneric<T, K> &operator*=( float scale ){
+		VectorGeneric<T, K> &operator*=( double scale ){
 			vals[0]*=scale;vals[1]*=scale;vals[2]*=scale;return *this;
 		}
 
@@ -128,7 +123,7 @@ class VectorGeneric {
 		VectorGeneric<T, K> &operator/=( int scale ){
 			vals[0]/=scale;vals[1]/=scale;vals[2]/=scale;return *this;
 		}
-		VectorGeneric<T, K> &operator/=( float scale ){
+		VectorGeneric<T, K> &operator/=( double scale ){
 			vals[0]/=scale;vals[1]/=scale;vals[2]/=scale;return *this;
 		}
 
@@ -177,49 +172,43 @@ class VectorGeneric {
 			return fabs(vals[0]-q[0])>EPSILON || fabs(vals[1]-q[1])>EPSILON || fabs(vals[2]-q[2])>EPSILON;
 		}
 
-		float dot( const VectorGeneric<T, K> &q )const{
+		double dot( const VectorGeneric<T, K> &q )const{
 			return vals[0]*q[0]+vals[1]*q[1]+vals[2]*q[2];
 		}
-		float dot( const VectorGeneric<K, T> &q )const{
+		double dot( const VectorGeneric<K, T> &q )const{
 			return vals[0]*q[0]+vals[1]*q[1]+vals[2]*q[2];
 		}
 		VectorGeneric<T, K> cross( const VectorGeneric<T, K> &q )const{
 			return VectorGeneric<T, K>( vals[1]*q[2]-vals[2]*q[1],vals[2]*q[0]-vals[0]*q[2],vals[0]*q[1]-vals[1]*q[0] );
 		}
-		VectorGeneric<float, int> cross( const VectorGeneric<K, T> &q )const{
-			return VectorGeneric<float, int>( vals[1]*q[2]-vals[2]*q[1],vals[2]*q[0]-vals[0]*q[2],vals[0]*q[1]-vals[1]*q[0] );
+		VectorGeneric<double, int> cross( const VectorGeneric<K, T> &q )const{
+			return VectorGeneric<double, int>( vals[1]*q[2]-vals[2]*q[1],vals[2]*q[0]-vals[0]*q[2],vals[0]*q[1]-vals[1]*q[0] );
 		}
-		float len()const{
-			return sqrt((float) vals[0]*vals[0]+vals[1]*vals[1]+vals[2]*vals[2]);
+		double len()const{
+			return sqrt((double) vals[0]*vals[0]+vals[1]*vals[1]+vals[2]*vals[2]);
 		}
-		float lenSqr()const{
+		double lenSqr()const{
 			return vals[0]*vals[0]+vals[1]*vals[1]+vals[2]*vals[2];
 		}
-		float dist( const VectorGeneric<T, K> &q )const{
-			float dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return sqrt(dx*dx+dy*dy+dz*dz);
+		double dist( const VectorGeneric<T, K> &q )const{
+			double dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return sqrt(dx*dx+dy*dy+dz*dz);
 		}
-		float dist( const VectorGeneric<K, T> &q )const{
-			float dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return sqrt(dx*dx+dy*dy+dz*dz);
-		}
-
-		float distSqr( const VectorGeneric<T, K> &q) {
-			float dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return dx*dx+dy*dy+dz*dz;
-		}
-		float distSqr( const VectorGeneric<K, T> &q) {
-			float dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return dx*dx+dy*dy+dz*dz;
+		double dist( const VectorGeneric<K, T> &q )const{
+			double dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return sqrt(dx*dx+dy*dy+dz*dz);
 		}
 
-		VectorGeneric<float, int> normalized()const{
-			float l=len();return VectorGeneric<float, int>( vals[0]/l,vals[1]/l,vals[2]/l );
+		double distSqr( const VectorGeneric<T, K> &q) {
+			double dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return dx*dx+dy*dy+dz*dz;
+		}
+		double distSqr( const VectorGeneric<K, T> &q) {
+			double dx=vals[0]-q[0],dy=vals[1]-q[1],dz=vals[2]-q[2];return dx*dx+dy*dy+dz*dz;
+		}
+
+		VectorGeneric<double, int> normalized()const{
+			double l=len();return VectorGeneric<double, int>( vals[0]/l,vals[1]/l,vals[2]/l );
 		}
 		void normalize(){
-			float l=len();vals[0]/=l;vals[1]/=l;vals[2]/=l; //will not necessarily normalize int vectors
-		}
-		float yaw()const{
-			return -atan2f( vals[0],vals[2] );
-		}
-		float pitch()const{
-			return -atan2f( vals[1],sqrtf( vals[0]*vals[0]+vals[2]*vals[2] ) );
+			double l=len();vals[0]/=l;vals[1]/=l;vals[2]/=l; //will not necessarily normalize int vectors
 		}
 		void clear(){
 			vals[0] = vals[1] = vals[2] = 0;
@@ -227,7 +216,7 @@ class VectorGeneric {
 
 		string asStr() {
 			char buffer[100];
-			float x = vals[0], y = vals[1], z = vals[2];
+			double x = vals[0], y = vals[1], z = vals[2];
 			int n = sprintf(buffer, "x: %f, y: %f, z: %f", x, y, z);
 			assert(n >= 0);	
 			return string(buffer);

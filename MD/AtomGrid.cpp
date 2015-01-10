@@ -1,7 +1,7 @@
 #include "AtomGrid.h"
 
 
-void AtomGrid::appendNeighborList(Atom *a, OffsetObj<Atom **> &gridSqr, float threshSqr) {
+void AtomGrid::appendNeighborList(Atom *a, OffsetObj<Atom **> &gridSqr, double threshSqr) {
 	if (*gridSqr.obj != (Atom *) NULL) {
 		Vector offset = gridSqr.offset;
 		Atom *current;
@@ -39,8 +39,8 @@ void AtomGrid::updateAtoms(vector<Atom *> &atoms_) {
 	atoms = atoms_;
 }
 
-void AtomGrid::buildNeighborLists(float thresh, bool loops[3]) { //grid size must be >= 2*thresh
-	float threshSqr = thresh*thresh;
+void AtomGrid::buildNeighborLists(double thresh, bool loops[3]) { //grid size must be >= 2*thresh
+	double threshSqr = thresh*thresh;
 	for (Atom *a : atoms) {
 		a->neighbors.erase(a->neighbors.begin(), a->neighbors.end()); 
 		a->posAtNeighborListing = a->pos;
@@ -75,77 +75,3 @@ void AtomGrid::buildNeighborLists(float thresh, bool loops[3]) { //grid size mus
 	}
 }
 
-
-/*
-
-void AtomGrid::sliceBounds(double *testlo, double *testhi, double *boxlo, double *boxhi, double *newBndlo, double *newBndhi) {
-	if (*testlo < *boxlo) {
-		double dx = *boxlo - *testlo;
-		*newBndlo = *boxhi - dx;
-		*newBndhi = *boxhi;
-		*testlo = *boxlo;
-	} else if (*testhi > *boxhi) {
-		double dx = *testhi - *boxhi;
-		*newBndlo = *boxlo;
-		*newBndhi = *boxlo + dx;
-		*testhi = *boxhi;
-	}
-}
-
-
-vector<Atom *> AtomGrid::atomsInNonLoopingBounds(Bounds b) {
-	vector<Atom *> inBounds;
-	int idxs[6];
-
-	for (int i=0; i<3; i++) {
-		idxs[2*i] = (*b[2*i] - *oPtrs[i]) / *dPtrs[i];
-		double upper = (*b[2*i+1] - *oPtrs[i]) / *dPtrs[i];
-		if ((int) upper == upper) {
-			idxs[2*i+1] = upper-1; //making it so if just on boundary, doesn't select box that is one higher than it needs to be.  Leads to segaults and stuff if on endge of box.
-		} else {
-			idxs[2*i+1] = upper;
-		}
-	}
-	vector<atomlist *> blocks;
-	for (int x=idxs[0]; x<=idxs[1]; x++) {
-		for (int y=idxs[2]; y<=idxs[3]; y++) {
-			for (int z=idxs[4]; z<=idxs[5]; z++) {
-				blocks.push_back(&(*this)(x, y, z));
-			}
-		}
-	}
-	for (atomlist *alist : blocks) {
-		for (Atom *a : *alist) {
-			if (b.atomInBounds(a)) {
-				inBounds.push_back(a);
-			}
-		}
-	}
-	return inBounds;
-}
-
-vector<Atom *> AtomGrid::selectFromBounds(Bounds b) { //assuming span of dims is less than bounds of box
-	vector<Atom *> inBounds;
-	vector<Bounds> toCheck;
-	toCheck.push_back(b);
-	for (int valIdx=0; valIdx<6; valIdx+=2) { //dealing with bounds wrapping around
-		for (int i=toCheck.size()-1; i>=0; i--) {
-			Bounds &b = toCheck[i];
-			double *lo = b[valIdx];
-			double *hi = b[valIdx+1];
-			double *boxlo = bounds[valIdx];
-			double *boxhi = bounds[valIdx+1];
-			Bounds sliceProd = b;
-			sliceBounds(lo, hi, boxlo, boxhi, sliceProd[valIdx], sliceProd[valIdx+1]);
-			if (!(sliceProd == b)) {
-				toCheck.push_back(sliceProd);
-			}
-		}
-	}
-	for (Bounds &b : toCheck) {
-		vector<Atom *> res = atomsInNonLoopingBounds(b);
-		inBounds.insert(inBounds.end(), res.begin(), res.end());
-	}
-	return inBounds;
-}
-*/

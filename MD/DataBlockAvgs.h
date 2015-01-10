@@ -2,12 +2,12 @@
 #define DATA_BLOCK_H
 class BlockAvgs {
 	public:
-		float temp;
-		float press;
-		float dens;
-		float engKinetic;
-		float engPotential;
-		float engTotal;
+		double temp;
+		double press;
+		double dens;
+		double engKinetic;
+		double engPotential;
+		double engTotal;
 
 };
 

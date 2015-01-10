@@ -16,13 +16,13 @@ class Atom {
 		Vector forceLast;
 		Vector posAtNeighborListing;
 		Atom *next;
-		float m;
+		double m;
 		int type;
 		int id;
 		vector<Neighbor> neighbors;
-		Atom (Vector pos_, float m_, int type_, int id_) : pos(pos_), next((Atom *) NULL), m(m_), type(type_), id(id_) {};
+		Atom (Vector pos_, double m_, int type_, int id_) : pos(pos_), next((Atom *) NULL), m(m_), type(type_), id(id_) {};
 		Atom () {};
-		float kinetic() {
+		double kinetic() {
 			return 0.5 * m * vel.lenSqr();
 		}
 

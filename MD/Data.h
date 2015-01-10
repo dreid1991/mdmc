@@ -8,6 +8,6 @@ class Data {
 		Data() : virialTotal(0) {};
 		BlockAvgs avgs;
 		Energy eng;
-		float virialTotal;
+		double virialTotal;
 };
 #endif

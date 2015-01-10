@@ -111,7 +111,7 @@ class Grid {
 							boxCoords[1] = j;
 							boxCoords[2] = k;
 							int didLoop[3] = {0, 0, 0};
-							float offsets[3] = {0, 0, 0};
+							double offsets[3] = {0, 0, 0};
 							T *neigh = &(*this)(boxCoords, didLoop);
 							bool append = true;
 							for (int i=0; i<3; i++) {
@@ -147,7 +147,7 @@ class Grid {
 							boxCoords[1] = j;
 							boxCoords[2] = k;
 							int didLoop[3] = {0, 0, 0};
-							float offsets[3] = {0, 0, 0};
+							double offsets[3] = {0, 0, 0};
 							T neigh = (*this)(boxCoords, didLoop);
 							bool append = true;
 							for (int i=0; i<3; i++) {
