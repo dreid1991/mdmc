@@ -99,7 +99,7 @@ void Integrate::setThermoValues(Run &params) {
 	simData.eng.potential = 0;
 	simData.virialTotal = 0;
 	//IF YOU WOULD LIKE TO OUTPUT DATA, THIS WOULD BE A GODO PLACE TO DO IT.  Example below
-	cout << simData.avgs.engTotal << endl;
+	cout << "Total energy " << simData.avgs.engTotal << endl;
 }
 
 bool Integrate::checkReNeighbor(vector<Atom *> &atoms, double movementThresh) {

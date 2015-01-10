@@ -19,8 +19,12 @@ using namespace std;
 
 
 int main() {
+	/*currently this code is set up with two species populating a 15*15*15 box.  Each species is being initialized to occupy about half the box.  
+	 *
+	 *
+	 */
 	const double rCut = 2.5;	
-	const double padding = 0.5
+	const double padding = 0.5;
 	AtomParamWrapper params(rCut);
 	params.push_back(AtomParams(1, 1, 3));
 	params.push_back(AtomParams(1.2, 1.2, 4));
@@ -28,8 +32,8 @@ int main() {
 	Bounds region1(Vector(0, 0, 0), Vector(7.5, 15.0, 15.0));
 	Bounds region2(Vector(8.0, 0.1, 0.1), Vector(14.9, 14.9, 14.9));
 
-	int gridSize = 2 * (rCut + padding) + .1;
-	Bounds b(Vector(0, 0, 0), Vector(15, 15, 15));
+	int gridSize = 4;
+	Bounds b(Vector(0, 0, 0), Vector(16, 16, 16));
 	Run run(b, interactionParams, gridSize, .005, 10, 1000);
 	run.padding = padding;
 	run.rCut = params.rCut;
@@ -38,11 +42,7 @@ int main() {
 	double temp = 0.1;
 	InitializeAtoms::initTemp(run.atoms, temp);
 	
-	run.periodic[0] = true; 
-	run.periodic[1] = true; 
-	run.periodic[2] = true; 
-	
-	//declaring fixes.  Make some cleaner way of doing this
+	//declaring fixes.  A fix is just an arbitrary operation that applies forces to atoms
 	
 	FixLjCut ljForce(run.atoms, run.atoms, run.data, run.params, run.rCut);
 	run.fixes.push_back(&ljForce);

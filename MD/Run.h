@@ -16,7 +16,10 @@ using namespace std;
 */
 class Run {
 	public:
-		Run(Bounds b, InteractionParams &params_, double gridSize, double timestep_, int reNeighborListCheck_, int dataInterval_) : params(params_), grid(atoms, b, gridSize, gridSize, gridSize), timestep(timestep_), reNeighborListCheck(reNeighborListCheck_), dataInterval(dataInterval_) {};
+		Run(Bounds b, InteractionParams &params_, double gridSize, double timestep_, int reNeighborListCheck_, int dataInterval_) : params(params_), grid(atoms, b, gridSize, gridSize, gridSize), timestep(timestep_), reNeighborListCheck(reNeighborListCheck_), dataInterval(dataInterval_) {
+			periodic[0] = periodic[1] = periodic[2] = true;
+		};
+
 		vector<Atom *> atoms;
 		vector<Fix *> fixes;
 		InteractionParams params;
