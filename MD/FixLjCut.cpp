@@ -12,6 +12,7 @@ void FixLjCut::compute() {
 			int typeB = b->type;
 			Vector distance = a->pos - (b->pos + n.offset);
 			double drSqr = distance.lenSqr();
+		//	cout << sqrt(drSqr) << " ";
 			if (drSqr < rCutSqrLoc) {
 				double ljparam1 = params.getParam1(typeA, typeB); 
 				double ljparam2 = params.getParam2(typeA, typeB); 

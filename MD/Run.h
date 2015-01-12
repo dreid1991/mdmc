@@ -31,6 +31,7 @@ class Run {
 		int reNeighborListCheck; //check for re-neighborlisting every # turns
 		int dataInterval;
 		Data data;
+		vector<vector<double> > moreData;
 
 };
 

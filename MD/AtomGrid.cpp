@@ -13,16 +13,19 @@ void AtomGrid::appendNeighborList(Atom *a, OffsetObj<Atom **> &gridSqr, double t
 	}
 }
 
-void AtomGrid::enforcePeriodic() { //make it so doesn't loop in finite dimensions
+bool AtomGrid::enforcePeriodic() { //make it so doesn't loop in finite dimensions
 	Vector lo = bounds.lo;
 	Vector hi = bounds.hi;
 	Vector trace = bounds.trace;
+	//bool enforce = false;
 	for (Atom *a : atoms) {
 		Vector prev = a->pos;
 		for (int i=0; i<3; i++) {
 			if (a->pos[i] < lo[i]) {
 				a->pos[i] += trace[i];
 			} else if (a->pos[i] >= hi[i]) {
+	//			cout << "looping periodic" << endl;
+//				enforce = true;
 				a->pos[i] -= trace[i];
 			}
 			//IF YOU GET MYSTERIOUS CRASHES, THERE MAY BE FLOATING POINT ERROR WHERE ADDING/SUBTRACTING TRACE PUTS IT SLIGHTLY OFF OF THE GRID
@@ -33,6 +36,8 @@ void AtomGrid::enforcePeriodic() { //make it so doesn't loop in finite dimension
 			assert(false);
 		}
 	}
+//	return enforce;
+	return false;
 }
 
 void AtomGrid::updateAtoms(vector<Atom *> &atoms_) {
@@ -73,5 +78,6 @@ void AtomGrid::buildNeighborLists(double thresh, bool loops[3]) { //grid size mu
 			appendNeighborList(a, neighborSquare, threshSqr);	
 		}
 	}
+	//atoms[0]->neighbors
 }
 

@@ -8,7 +8,7 @@ $(info Serial result = $(OBJS))
 $(info Serial result = $(H))
 
 main: $(OBJS) 
-	$(CC) $(FLAGS) $(OBJS) -o sim.out
+	$(CC) $(FLAGS) $(OBJS) -o a.out
 
 %.cpp.o: %.cpp
 	$(CC) $(FLAGS) $(DEBUG) -c -o $@ $< 

@@ -64,7 +64,10 @@ void Integrate::run(Run &params, int turn, int numTurns) { //current turn should
 	}
 	for (; turn<numTurns; turn++) {
 		if (! (turn%reNeighborListCheck) && checkReNeighbor(atoms, padding)) {
-			grid.enforcePeriodic();
+			bool enforce = grid.enforcePeriodic();
+			if (enforce) {
+				cout << turn << endl;
+			}
 
 			grid.buildNeighborLists(rCut, periodic);
 		}
@@ -76,6 +79,7 @@ void Integrate::run(Run &params, int turn, int numTurns) { //current turn should
 		if (! (turn % dataInterval)) {
 			setThermoValues(params);
 		}
+	//	cout << atoms[0]->pos[0] << " ";
 	}
 }
 
@@ -99,7 +103,32 @@ void Integrate::setThermoValues(Run &params) {
 	simData.eng.potential = 0;
 	simData.virialTotal = 0;
 	//IF YOU WOULD LIKE TO OUTPUT DATA, THIS WOULD BE A GODO PLACE TO DO IT.  Example below
-	cout << "Total energy " << simData.avgs.engTotal << endl;
+//	cout << simData.avgs.engTotal << " ";
+	//cout << simData.avgs.engKinetic << " ";
+	
+
+//	params.moreData[0].push_back(params.atoms[1]->pos[0] - params.atoms[0]->pos[0]);
+//	params.moreData[1].push_back(simData.avgs.engPotential);
+	params.moreData[2].push_back(simData.avgs.engTotal);
+	params.moreData[0].push_back(params.atoms[0]->pos[0]);
+	params.moreData[1].push_back(params.atoms[1]->pos[0]);
+	params.moreData[3].push_back(params.atoms[1]->neighbors.size());
+	double x1 = params.atoms[0]->pos[0];
+	double x2 = params.atoms[1]->pos[0];
+	double dx = fabs(x1 - x2);
+	double trace = params.grid.bounds.trace[0];
+	if (dx > trace/2) {
+		if (x2 > x1) {
+			x2 -= trace;
+		} else {
+			x1 -= trace;
+		}
+	}
+
+	if (dx > params.grid.bounds.trace[0]/2) {
+		dx -= params.grid.bounds.trace[0]/2;
+	}
+	params.moreData[4].push_back(fabs(x1 - x2));
 }
 
 bool Integrate::checkReNeighbor(vector<Atom *> &atoms, double movementThresh) {
