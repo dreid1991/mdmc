@@ -11,7 +11,7 @@ namespace Integrate {
 	void compute(vector<Fix *> &, int);
 	void firstTurn(Run &params);
 	void run(Run &params, int currentTurn, int numTurns);
-	bool checkReNeighbor(vector<Atom *> &atoms, double);
+	bool rebuildIsDangerous(vector<Atom *> &atoms, double);
 	void addKineticEnergy(vector<Atom *> &, Data &);
 	void setThermoValues(Run &);
 }

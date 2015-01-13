@@ -56,20 +56,20 @@ void Integrate::run(Run &params, int turn, int numTurns) { //current turn should
 	for (int i=0; i<3; i++) {
 		periodic[i] = params.periodic[i];
 	}
-	int reNeighborListCheck = params.reNeighborListCheck;
+	int neighborListInterval = params.neighborListInterval;
 	double dt = params.timestep;
 	if (turn==0) {
 		firstTurn(params);
 		turn++;
 	}
 	for (; turn<numTurns; turn++) {
-		if (! (turn%reNeighborListCheck) && checkReNeighbor(atoms, padding)) {
-			bool enforce = grid.enforcePeriodic();
-			if (enforce) {
-				cout << turn << endl;
+		params.currentTurn = turn;
+		if (! (turn%neighborListInterval)) {
+			if (rebuildIsDangerous(atoms, padding)) {
+				params.dangerousRebuilds++;
 			}
-
-			grid.buildNeighborLists(rCut, periodic);
+			grid.enforcePeriodic();
+			grid.buildNeighborLists(rCut + padding, periodic);
 		}
 		addKineticEnergy(atoms, simData);
 		verletPreForce(atoms, dt);
@@ -103,38 +103,15 @@ void Integrate::setThermoValues(Run &params) {
 	simData.eng.potential = 0;
 	simData.virialTotal = 0;
 	//IF YOU WOULD LIKE TO OUTPUT DATA, THIS WOULD BE A GODO PLACE TO DO IT.  Example below
-//	cout << simData.avgs.engTotal << " ";
-	//cout << simData.avgs.engKinetic << " ";
-	
+	cout << "current turn: " << params.currentTurn << ", kinetic energy: " << simData.avgs.engKinetic << ", potential energy: " << simData.avgs.engPotential << endl;
 
-//	params.moreData[0].push_back(params.atoms[1]->pos[0] - params.atoms[0]->pos[0]);
-//	params.moreData[1].push_back(simData.avgs.engPotential);
-	params.moreData[2].push_back(simData.avgs.engTotal);
-	params.moreData[0].push_back(params.atoms[0]->pos[0]);
-	params.moreData[1].push_back(params.atoms[1]->pos[0]);
-	params.moreData[3].push_back(params.atoms[1]->neighbors.size());
-	double x1 = params.atoms[0]->pos[0];
-	double x2 = params.atoms[1]->pos[0];
-	double dx = fabs(x1 - x2);
-	double trace = params.grid.bounds.trace[0];
-	if (dx > trace/2) {
-		if (x2 > x1) {
-			x2 -= trace;
-		} else {
-			x1 -= trace;
-		}
-	}
 
-	if (dx > params.grid.bounds.trace[0]/2) {
-		dx -= params.grid.bounds.trace[0]/2;
-	}
-	params.moreData[4].push_back(fabs(x1 - x2));
 }
 
-bool Integrate::checkReNeighbor(vector<Atom *> &atoms, double movementThresh) {
+bool Integrate::rebuildIsDangerous(vector<Atom *> &atoms, double movementThresh) {
 	double threshSqr = movementThresh*movementThresh;
 	for (Atom *a : atoms) {
-		if (a->pos.distSqr(a->posAtNeighborListing) > threshSqr) { //HEY - this is dangerous because we're only rebuiding once at least one atom has moved too far, so we could be integrating for non-checking turns with relevant forces not being calculated
+		if (a->pos.distSqr(a->posAtNeighborListing) > threshSqr) { 
 			return true;
 		}
 	}

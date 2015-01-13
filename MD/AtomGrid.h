@@ -14,7 +14,7 @@ class AtomGrid : public Grid<Atom *> {
 	}
 	void appendNeighborList(Atom *, OffsetObj<Atom **> &, double);
 	public:
-		bool enforcePeriodic();
+		void enforcePeriodic();
 		void updateAtoms(vector<Atom *> &);
 		Bounds bounds;
 		atomlist &atoms;

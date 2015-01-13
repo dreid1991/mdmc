@@ -16,7 +16,7 @@ using namespace std;
 */
 class Run {
 	public:
-		Run(Bounds b, InteractionParams &params_, double gridSize, double timestep_, int reNeighborListCheck_, int dataInterval_) : params(params_), grid(atoms, b, gridSize, gridSize, gridSize), timestep(timestep_), reNeighborListCheck(reNeighborListCheck_), dataInterval(dataInterval_) {
+		Run(Bounds b, InteractionParams &params_, double gridSize, double timestep_, int neighborListInterval_, int dataInterval_) : params(params_), grid(atoms, b, gridSize, gridSize, gridSize), timestep(timestep_), neighborListInterval(neighborListInterval_), dataInterval(dataInterval_), dangerousRebuilds(0), currentTurn(0) {
 			periodic[0] = periodic[1] = periodic[2] = true;
 		};
 
@@ -28,10 +28,11 @@ class Run {
 		double padding;
 		double timestep;
 		bool periodic[3];
-		int reNeighborListCheck; //check for re-neighborlisting every # turns
+		int neighborListInterval; //check for re-neighborlisting every # turns
 		int dataInterval;
 		Data data;
-		vector<vector<double> > moreData;
+		int dangerousRebuilds;
+		int currentTurn;
 
 };
 
