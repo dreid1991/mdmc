@@ -79,7 +79,7 @@ void Integrate::run(Run &params, int turn, int numTurns) { //current turn should
 		if (! (turn % dataInterval)) {
 			setThermoValues(params);
 		}
-
+	//	cout << atoms[0]->pos[0] << " ";
 	}
 }
 
@@ -92,7 +92,7 @@ void Integrate::setThermoValues(Run &params) {
 	double temp = avgKinetic * (2.0 / 3) / (double) atoms.size();
 	double volume = params.grid.bounds.volume();
 	double density = atoms.size() / volume;
-	double pressure = density * temp + simData.virialTotal / volume / atoms.size() / dataInterval;
+	double pressure = density * temp + simData.virialTotal / volume / atoms.size();
 	simData.avgs.engKinetic = avgKinetic;
 	simData.avgs.engPotential = avgPotential;
 	simData.avgs.engTotal = avgPotential + avgKinetic;
@@ -109,7 +109,7 @@ void Integrate::setThermoValues(Run &params) {
 }
 
 bool Integrate::rebuildIsDangerous(vector<Atom *> &atoms, double movementThresh) {
-	double threshSqr = movementThresh*movementThresh / 4;
+	double threshSqr = movementThresh*movementThresh;
 	for (Atom *a : atoms) {
 		if (a->pos.distSqr(a->posAtNeighborListing) > threshSqr) { 
 			return true;
