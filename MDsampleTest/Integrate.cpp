@@ -103,7 +103,8 @@ void Integrate::setThermoValues(Run &params) {
 	simData.eng.potential = 0;
 	simData.virialTotal = 0;
 	//IF YOU WOULD LIKE TO OUTPUT DATA, THIS WOULD BE A GODO PLACE TO DO IT.  Example below
-	cout << "current turn: " << params.currentTurn << ", kinetic energy: " << simData.avgs.engKinetic << ", potential energy: " << simData.avgs.engPotential << endl;
+	cout << params.currentTurn << " " << simData.avgs.engKinetic << " " << simData.avgs.engPotential << " " << simData.avgs.press << endl;
+	//cout << "current turn: " << params.currentTurn << ", kinetic energy: " << simData.avgs.engKinetic << ", potential energy: " << simData.avgs.engPotential << endl;
 
 
 }
