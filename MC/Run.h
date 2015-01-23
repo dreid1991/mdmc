@@ -3,7 +3,6 @@
 
 #include "Atom.h"
 #include "AtomGrid.h"
-#include "Fix.h"
 #include <vector>
 #include "Data.h"
 #include "InteractionParams.h"
@@ -16,17 +15,15 @@ using namespace std;
 */
 class Run {
 	public:
-		Run(Bounds b, InteractionParams &params_, double gridSize, double timestep_, int neighborListInterval_, int dataInterval_) : params(params_), grid(atoms, b, gridSize, gridSize, gridSize), timestep(timestep_), neighborListInterval(neighborListInterval_), dataInterval(dataInterval_), dangerousRebuilds(0), currentTurn(0) {
+		Run(Bounds b, InteractionParams &params_, double gridSize, int dataInterval_) : params(params_), grid(atoms, b, gridSize, gridSize, gridSize), dataInterval(dataInterval_), currentTurn(0) {
 			periodic[0] = periodic[1] = periodic[2] = true;
 		};
 
 		vector<Atom *> atoms;
-		vector<Fix *> fixes;
 		InteractionParams params;
 		AtomGrid grid;
 		double rCut;
 		double padding;
-		double timestep;
 		bool periodic[3];
 		int neighborListInterval; //check for re-neighborlisting every # turns
 		int dataInterval;

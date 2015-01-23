@@ -40,20 +40,14 @@ int main() {
 	InitializeAtoms::populateOnGrid(run.atoms, region2, params[1], 700);
 	
 	double temp = 1.2;
-	InitializeAtoms::initTemp(run.atoms, temp);
 	
 	//declaring fixes.  A fix is just an arbitrary operation that applies forces to atoms
 	
-	FixLjCut ljForce(run.atoms, run.atoms, run.data, run.params, run.rCut);
-	run.fixes.push_back(&ljForce);
-
-	FixNVT constTemp(run.atoms, run.atoms, run.data, temp, 30);
-	run.fixes.push_back(&constTemp);
 	
 	//end fixes
 
 	const int numTurns = 30000;
-	Integrate::run(run, 0, numTurns);
+//	Integrate::run(run, 0, numTurns);
 
-	cout << run.dangerousRebuilds << " dangerous rebuilds " << endl;
+//	cout << run.dangerousRebuilds << " dangerous rebuilds " << endl;
 }

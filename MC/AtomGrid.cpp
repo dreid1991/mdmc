@@ -2,18 +2,18 @@
 
 void AtomGrid::populateGrid() {
 	for (Atom *a : atoms) {
-		Atom **currentAtPos = (*this)(a->pos);
+		Atom **currentAtPos = &(*this)(a->pos);
 		a->next = *currentAtPos;
 		*currentAtPos = a;
 	}
 }
 
-void AtomGrid::appendNeighborList(Atom *a, OffsetObj<Atom **> &gridSqr, double threshSqr) {
-	if (*gridSqr.obj != (Atom *) NULL) {
+void AtomGrid::appendNeighborList(Atom *a, OffsetObj<Atom *> &gridSqr, double threshSqr) {
+	if (gridSqr.obj != (Atom *) NULL) {
 		Vector offset = gridSqr.offset;
 		Atom *current;
-		for (current = *gridSqr.obj; current != (Atom *)NULL; current = current->next) {
-			if (a->pos.distSqr(current->pos + offset) <= threshSqr && current != a) {
+		for (current = gridSqr.obj; current != (Atom *)NULL; current = current->next) {
+			if (current != a && a->pos.distSqr(current->pos + offset) <= threshSqr && current != a) {
 				a->neighbors.push_back(Neighbor(current, offset));	
 			}
 		}
@@ -58,29 +58,26 @@ void AtomGrid::buildNeighborLists(double thresh, bool loops[3]) { //grid size mu
 	*using looping values, make list of squares that corresponds to the neighbors for each square.
 	 Then for each atom, add atoms by following each linked list and appening those within rcut
 	*/ 
-	vector<vector<OffsetObj<Atom **> > > neighborSquaress;
+	vector<vector<OffsetObj<Atom *> > > neighborSquaress;
 	neighborSquaress.reserve(raw.size());
 	for (int i=0; i<ns[0]; i++) {
 		for (int j=0; j<ns[1]; j++) {
 			for (int k=0; k<ns[2]; k++) {
 				int coord[3];
 				coord[0] = i; coord[1] = j; coord[2] = k;
-				neighborSquaress.push_back(getNeighbors(coord, loops, bounds.trace));
+				neighborSquaress.push_back(getNeighborVals(coord, loops, bounds.trace));
 			}
 		}
 	}
 	for (Atom *a : atoms) {
 		int idx = idxFromPos(a->pos);		
-		Atom **neighborSquare = &(*this)(a->pos);
-		OffsetObj<Atom **> selfSquare = OffsetObj<Atom **>(neighborSquare, Vector(0, 0, 0));
+		Atom *neighborSquare = (*this)(a->pos);
+		OffsetObj<Atom *> selfSquare = OffsetObj<Atom *>(neighborSquare, Vector(0, 0, 0));
 		appendNeighborList(a, selfSquare, threshSqr);
-		a->next = *selfSquare.obj;
-		*selfSquare.obj = a;
-		vector<OffsetObj<Atom **> > &neighborSquares = neighborSquaress[idx];
-		for (OffsetObj<Atom **> &neighborSquare : neighborSquares) {
+		vector<OffsetObj<Atom *> > &neighborSquares = neighborSquaress[idx];
+		for (OffsetObj<Atom *> &neighborSquare : neighborSquares) {
 			appendNeighborList(a, neighborSquare, threshSqr);	
 		}
 	}
-	//atoms[0]->neighbors
 }
 

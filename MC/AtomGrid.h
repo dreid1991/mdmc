@@ -11,7 +11,7 @@
 using namespace std;
 class AtomGrid : public Grid<Atom *> {
 	void populateGrid();
-	void appendNeighborList(Atom *, OffsetObj<Atom **> &, double);
+	void appendNeighborList(Atom *, OffsetObj<Atom *> &, double);
 	public:
 		void enforcePeriodic();
 		void updateAtoms(vector<Atom *> &);
