@@ -10,7 +10,6 @@
 #include "Run.h"
 #include "Integrate.h"
 #include "Data.h"
-#include "includefixes.h"
 #include "AtomParams.h"
 #include "InteractionParams.h"
 #include "InitializeAtoms.h"
@@ -33,13 +32,13 @@ int main() {
 
 	int gridSize = 4;
 	Bounds b(Vector(0, 0, 0), Vector(16, 16, 16));
-	Run run(b, interactionParams, gridSize, .005, 30, 1000);
+	double temp = 1.5;
+	Run run(b, interactionParams, gridSize, 1000, temp);
 	run.padding = padding;
 	run.rCut = params.rCut;
 	InitializeAtoms::populateOnGrid(run.atoms, region1, params[0], 700);
-	InitializeAtoms::populateOnGrid(run.atoms, region2, params[1], 700);
+	//InitializeAtoms::populateOnGrid(run.atoms, region2, params[1], 700);
 	
-	double temp = 1.2;
 	
 	//declaring fixes.  A fix is just an arbitrary operation that applies forces to atoms
 	
@@ -47,7 +46,7 @@ int main() {
 	//end fixes
 
 	const int numTurns = 30000;
-//	Integrate::run(run, 0, numTurns);
+	Integrate::run(run, numTurns);
 
 //	cout << run.dangerousRebuilds << " dangerous rebuilds " << endl;
 }

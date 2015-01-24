@@ -1,7 +1,6 @@
 #ifndef DATA_H
 #define DATA_H
 
-#include "Energy.h"
 #include "DataBlockAvgs.h"
 class Data {
 	public:

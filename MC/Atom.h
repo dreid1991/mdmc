@@ -15,10 +15,10 @@ class Atom {
 		Vector posAtNeighborListing;
 		Vector virial;
 		Atom *next;
-		double energy;
 		double m;
 		int type;
 		int id;
+		double energy;
 		vector<Neighbor> neighbors;
 		vector<MoveType *> moveTypes;
 		Atom (Vector pos_, double m_, int type_, int id_) : pos(pos_), next((Atom *) NULL), m(m_), type(type_), id(id_), energy(0) {};

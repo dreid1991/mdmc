@@ -15,7 +15,7 @@ using namespace std;
 */
 class Run {
 	public:
-		Run(Bounds b, InteractionParams &params_, double gridSize, int dataInterval_) : params(params_), grid(atoms, b, gridSize, gridSize, gridSize), dataInterval(dataInterval_), currentTurn(0) {
+		Run(Bounds b, InteractionParams &params_, double gridSize, int dataInterval_, double temp_) : params(params_), grid(atoms, b, gridSize, gridSize, gridSize), dataInterval(dataInterval_), temp(temp_), currentTurn(0) {
 			periodic[0] = periodic[1] = periodic[2] = true;
 		};
 
@@ -27,6 +27,7 @@ class Run {
 		bool periodic[3];
 		int neighborListInterval; //check for re-neighborlisting every # turns
 		int dataInterval;
+		double temp;
 		Data data;
 		int dangerousRebuilds;
 		int currentTurn;
